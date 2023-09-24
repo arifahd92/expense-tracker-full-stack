@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EyeFill, EyeSlashFill } from "react-bootstrap-icons"; // Import Bootstrap Icons
-
+import axios from "axios";
 function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -23,8 +23,25 @@ function Signup() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/signup",
+        formData
+      );
+      // Assuming that you expect a status code in the response, check it like this:
+      console.log(response.status);
+      if (response.status !== 200) {
+        alert("Something went wrong");
+        return;
+      }
+      console.log(response);
+    } catch (err) {
+      console.log(err.response.data.error);
+      alert(err.response.data.error);
+    }
   };
 
   return (
@@ -33,6 +50,7 @@ function Signup() {
         <div className="form-group">
           <label htmlFor="name">Name:</label>
           <input
+            required
             type="text"
             className="form-control"
             id="name"
@@ -45,6 +63,7 @@ function Signup() {
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
+            required
             type="email"
             className="form-control"
             id="email"
@@ -58,6 +77,7 @@ function Signup() {
           <label htmlFor="password">Password:</label>
           <div className="input-group">
             <input
+              required
               type={showPassword ? "text" : "password"}
               className="form-control"
               id="password"
