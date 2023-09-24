@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EyeFill, EyeSlashFill } from "react-bootstrap-icons"; // Import Bootstrap Icons
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function Signup() {
+function Login() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,19 +29,16 @@ function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/signup",
+        "http://localhost:4000/login",
         formData
       );
-      // Assuming that you expect a status code in the response, check it like this:
-      console.log(response.status);
+
       if (response.status !== 200) {
         alert("Something went wrong");
         return;
       }
       console.log(response);
-      alert("success");
-      setFormData({ name: "", email: "", password: "" });
-      navigate("/");
+      
     } catch (err) {
       console.log(err.response.data.error);
       alert(err.response.data.error);
@@ -50,8 +47,8 @@ function Signup() {
 
   return (
     <>
-      <div className="container mt-3 d-flex justify-content-center ">
-        <h3 className="text-secondary">signup</h3>
+      <div className="container mt-3 d-flex justify-content-center">
+        <h3 className="text-secondary">login</h3>
       </div>
       <div className="container mt-5  ">
         <form onSubmit={handleSubmit}>
@@ -108,13 +105,14 @@ function Signup() {
           <div className="d-flex justify-content-center text-primary">
             <div
               className="signup  border-bottom  cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/register")}
             >
-              Already registered? Login
+              Not registered yet? Register
             </div>
           </div>
+
           <button type="submit" className="btn btn-primary mt-4 w-100 ">
-            Submit
+            submit
           </button>
         </form>
       </div>
@@ -122,4 +120,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Login;
