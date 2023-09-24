@@ -1,23 +1,30 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
+import { EyeFill, EyeSlashFill } from "react-bootstrap-icons"; // Import Bootstrap Icons
 
-function Signup () {
-  const [formData, setFormData] = useState ({
-    name: '',
-    email: '',
-    password: '',
+function Signup() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
   });
 
-  const handleChange = e => {
-    const {name, value} = e.target; // an object with name and value key and more
+  const [showPassword, setShowPassword] = useState(false);
 
-    setFormData ({
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
       ...formData,
       [name]: value,
     });
   };
 
-  const handleSubmit = e => {
-    e.preventDefault ();
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -48,18 +55,29 @@ function Signup () {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">password:</label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-          />
+          <label htmlFor="password">Password:</label>
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form-control"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+            />
+            <div className="input-group-append border">
+              <button
+                className="btn btn-outline-none"
+                type="button"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+              </button>
+            </div>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary mt-4">
           Submit
         </button>
       </form>
