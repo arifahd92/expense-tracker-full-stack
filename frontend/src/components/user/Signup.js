@@ -28,7 +28,7 @@ function Signup() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5  ">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
@@ -77,7 +77,8 @@ function Signup() {
             </div>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary mt-4">
+
+        <button type="submit" className="btn btn-primary mt-4 w-100 ">
           Submit
         </button>
       </form>
