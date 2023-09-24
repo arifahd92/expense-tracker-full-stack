@@ -4,6 +4,7 @@ const cors = require ('cors');
 // files import
 const sequelize = require ('./db/connection');
 const signupRouter = require ('./routes/signup');
+const loginRouter = require ('./routes/login');
 //************* */
 
 const corsOptions = {
@@ -14,6 +15,7 @@ const corsOptions = {
 app.use (cors (corsOptions));
 app.use (express.json ());
 app.use (signupRouter);
+app.use (loginRouter);
 sequelize
   .sync ()
   .then (() => {
