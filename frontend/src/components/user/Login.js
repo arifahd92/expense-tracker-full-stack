@@ -4,7 +4,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function Login() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -38,7 +37,8 @@ function Login() {
         return;
       }
       console.log(response);
-      
+      alert("success");
+      setFormData({ email: "", password: "" });
     } catch (err) {
       console.log(err.response.data.error);
       alert(err.response.data.error);
@@ -52,19 +52,6 @@ function Login() {
       </div>
       <div className="container mt-5  ">
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name:</label>
-            <input
-              required
-              type="text"
-              className="form-control"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your name"
-            />
-          </div>
           <div className="form-group">
             <label htmlFor="email">Email:</label>
             <input
