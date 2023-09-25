@@ -1,6 +1,6 @@
 const sequelize = require ('../db/connection');
 const Sequelize = require ('sequelize');
-const Signup = sequelize.define ('signup', {
+const User = sequelize.define ('user', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -14,4 +14,4 @@ const Signup = sequelize.define ('signup', {
     allowNull: false,
   },
 });
-module.exports = Signup;
+module.exports = User;

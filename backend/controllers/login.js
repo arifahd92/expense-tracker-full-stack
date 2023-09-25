@@ -12,7 +12,6 @@ const login = async (req, res) => {
       return res.status (404).json ({error: 'user not found'});
     }
     if (exists) {
-      console.log (exists.password == password);
       bcrypt.compare (password, exists.password, (err, result) => {
         if (err) {
           //internal error of bcrypt
@@ -21,12 +20,13 @@ const login = async (req, res) => {
             .status (500)
             .json ({message: 'password decryption failed, try again '});
         }
-        if (!!result) {
-          // password matched
-          console.log (result);
+        if (result) {
+          // password mtched
+          console.log (result); //true
           return res.send ({message: 'success'});
         }
         if (!result) {
+          // mismatch
           return res.status (401).json ({error: 'unthorized access'});
         }
       });

@@ -5,6 +5,9 @@ const cors = require ('cors');
 const sequelize = require ('./db/connection');
 const signupRouter = require ('./routes/signup');
 const loginRouter = require ('./routes/login');
+const expenseRouter = require ('./routes/expense');
+const Expense = require ('./models/expense');
+const User = require ('./models/signup');
 //************* */
 
 const corsOptions = {
@@ -16,6 +19,9 @@ app.use (cors (corsOptions));
 app.use (express.json ());
 app.use (signupRouter);
 app.use (loginRouter);
+app.use (expenseRouter);
+User.hasMany (Expense);
+Expense.belongsTo (User);
 sequelize
   .sync ()
   .then (() => {
