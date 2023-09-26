@@ -1,11 +1,14 @@
 const express = require ('express');
 const app = express ();
 const cors = require ('cors');
+const cookieParser = require ('cookie-parser');
+
 // files import
 const sequelize = require ('./db/connection');
 const signupRouter = require ('./routes/signup');
 const loginRouter = require ('./routes/login');
 const expenseRouter = require ('./routes/expense');
+const verifyRouter = require ('./routes/verify');
 const Expense = require ('./models/expense');
 const User = require ('./models/signup');
 //************* */
@@ -17,9 +20,11 @@ const corsOptions = {
 };
 app.use (cors (corsOptions));
 app.use (express.json ());
+app.use (cookieParser ());
 app.use (signupRouter);
 app.use (loginRouter);
 app.use (expenseRouter);
+app.use (verifyRouter);
 User.hasMany (Expense);
 Expense.belongsTo (User);
 sequelize

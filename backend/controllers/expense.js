@@ -8,7 +8,7 @@ const addExpense = async (req, res) => {
     const input = req.body;
     const createdData = await Expense.create ({...input, userId});
     console.log ('added');
-    res.send (data);
+    res.send (createdData);
   } catch (error) {
     console.log (error);
     res.json ({error: 'some thing went wrong'});
