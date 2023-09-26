@@ -37,6 +37,12 @@ export default function Expense() {
     };
     getExpense();
   }, []);
+  //handle changes in input fields
+  const handleinputchange = (e) => {
+    let { id, value } = e.target;
+    setInput({ ...input, [id]: value });
+  };
+  // submit form data add/update**************
   const submitHandeler = async (e, ind = -1) => {
     e.preventDefault();
     try {
@@ -69,10 +75,7 @@ export default function Expense() {
       console.log(error.message);
     }
   };
-  const handleinputchange = (e) => {
-    let { id, value } = e.target;
-    setInput({ ...input, [id]: value });
-  };
+
   //************Update ui **********
   const handleEdit = (ind, id) => {
     const target = list[ind];
@@ -82,6 +85,35 @@ export default function Expense() {
     setShowInput(true);
     setEditIndex(ind);
   };
+
+  //delete expense
+  const handleDelete = async (id, index) => {
+    console.log("i got clicked");
+    try {
+      const confirm = window.confirm(
+        "Are you sure data will be deleted permanently?"
+      );
+      if (!confirm) {
+        return;
+      }
+      const expenseId = id;
+      const response = await axios.delete(
+        `http://localhost:4000/delete-expense/${expenseId}`
+      );
+      if (response.status != 200) {
+        alert("some thing went wrong try again");
+        return;
+      }
+      const data = await response.data;
+      let updated = [...list];
+      updated.splice(index, 1);
+      setList(updated);
+    } catch (error) {
+      console.log(error.message);
+      alert("check internet");
+    }
+  };
+
   return (
     <>
       <div className="container  container-sm mt-5 w-sm-75">
@@ -219,7 +251,12 @@ export default function Expense() {
                 </button>
               </div>
               <div className="col-2  text-center ">
-                <button className="btn bg-danger float-end ">delete</button>
+                <button
+                  onClick={() => handleDelete(item.id, ind)}
+                  className="btn bg-danger float-end "
+                >
+                  delete
+                </button>
               </div>
               <hr />
             </div>
