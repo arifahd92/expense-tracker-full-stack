@@ -27,6 +27,8 @@ function Login() {
     e.preventDefault();
 
     try {
+      console.log("cookie");
+      console.log(document.cookie);
       const response = await axios.post(
         "http://localhost:4000/login",
         formData
@@ -36,10 +38,16 @@ function Login() {
         alert("Something went wrong");
         return;
       }
-      console.log(response);
+      const token = response.data.token;
+      const userId = response.data.userId.toString();
+      localStorage.setItem("userToken", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userEmail", formData.email);
       alert("success");
       setFormData({ email: "", password: "" });
+      navigate(`/expense/${userId}`);
     } catch (err) {
+      //response object will be stored in err variable of catch
       console.log(err.response.data.error);
       alert(err.response.data.error);
     }

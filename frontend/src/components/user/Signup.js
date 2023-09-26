@@ -54,7 +54,7 @@ function Signup() {
         <h3 className="text-secondary">signup</h3>
       </div>
       <div className="container mt-5  ">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="bg-body-secondary">
           <div className="form-group">
             <label htmlFor="name">Name:</label>
             <input
