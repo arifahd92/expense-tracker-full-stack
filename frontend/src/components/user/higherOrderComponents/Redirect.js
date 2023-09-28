@@ -29,14 +29,14 @@ export default function Redirect({ Component }) {
       };
       const response = await axios.post(apiUrl, requestData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
           "Content-Type": "application/json",
         },
       });
       const data = await response.data;
       console.log(data);
       if (data.verification) {
-        navigate(`/expense/${id}`);
+        navigate(`/expense`);
       }
     } catch (error) {
       console.log(error);

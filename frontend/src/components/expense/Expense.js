@@ -1,16 +1,15 @@
 import axios from "axios";
+
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function Expense() {
-  const [list, setList] = useState([
-    { id: 1, amount: "10000", catagory: "Movie", description: "Ujhh" },
-    { id: 2, amount: "20000", catagory: "Movie", description: "Ujhh" },
-    { id: 3, amount: "30000", catagory: "Movie", description: "Ujhh" },
-  ]);
+  const [list, setList] = useState([]);
   const [editIndex, setEditIndex] = useState(-1);
   const [expenseId, setExpenseId] = useState(-1);
   const [editFlag, setEditFlag] = useState(false);
+  const [request, setRequest] = useState(false);
   const [input, setInput] = useState({
     amount: "",
     catagory: "",
@@ -19,23 +18,40 @@ export default function Expense() {
   const [showInput, setShowInput] = useState(false);
   const { userId } = useParams();
   const userEmail = localStorage.getItem("userEmail");
+  const userToken = localStorage.getItem("userToken");
+  const navigate = useNavigate();
   useEffect(() => {
     const getExpense = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/get-expense/${userId}`
-        );
+        setRequest(true);
+        const response = await axios.get(`http://localhost:4000/get-expense`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userToken,
+          },
+        });
+        console.log("get data response");
         console.log(response);
         if (response.status !== 200) {
           alert("something went wrong");
+          setRequest(false);
         }
         console.log(response.data);
         setList(response.data);
+        setRequest(false);
       } catch (err) {
+        if (err.response.data.verification === false) {
+          console.log("invalid token");
+          navigate("/");
+        }
         alert(err.response.data.error);
       }
     };
-    getExpense();
+    if (userToken) {
+      getExpense();
+    } else {
+      navigate("/");
+    }
   }, []);
   //handle changes in input fields
   const handleinputchange = (e) => {
@@ -46,13 +62,19 @@ export default function Expense() {
   const submitHandeler = async (e, ind = -1) => {
     e.preventDefault();
     try {
+      setRequest(true);
       let response;
-      let addURL = `http://localhost:4000/add-expense/${userId}`;
+      let addURL = `http://localhost:4000/add-expense`;
       let updateURL = `http://localhost:4000/update-expense/${expenseId}`;
       if (editFlag) {
         response = await axios.put(updateURL, input);
       } else {
-        response = await axios.post(addURL, input);
+        response = await axios.post(addURL, input, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userToken,
+          },
+        });
       }
 
       console.log(response);
@@ -70,9 +92,14 @@ export default function Expense() {
         setEditIndex(-1);
       }
       setInput({ amount: "", catagory: "", description: "" });
+      setRequest(false);
     } catch (error) {
       alert(error.message);
-      console.log(error.message);
+      if (error.response.data.verification === false) {
+        console.log("invalid token");
+        setRequest(false);
+        navigate("/");
+      }
     }
   };
 
@@ -97,30 +124,48 @@ export default function Expense() {
         return;
       }
       const expenseId = id;
+      setRequest(true);
       const response = await axios.delete(
         `http://localhost:4000/delete-expense/${expenseId}`
       );
       if (response.status != 200) {
         alert("some thing went wrong try again");
+        setRequest(false);
         return;
       }
       const data = await response.data;
       let updated = [...list];
       updated.splice(index, 1);
       setList(updated);
+      setRequest(false);
     } catch (error) {
       console.log(error.message);
-      alert("check internet");
+      setRequest(false);
+      alert(error.message);
+      if (error.response.data.verification === false) {
+        console.log("invalid token");
+        navigate("/");
+      }
     }
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userToken");
+    navigate("/");
+  };
   return (
     <>
       <div className="container  container-sm mt-5 w-sm-75">
         <div className="row   ">
-          <div className="col-8 text-warning  ">Welcome: {userEmail}</div>
+          <div className="col-8 text-warning  ">{userEmail}</div>
           <div className="col  ">
-            <button className="btn btn-warning  float-end  ">logout</button>
+            <button
+              className="btn btn-warning  float-end"
+              onClick={handleLogout}
+            >
+              logout
+            </button>
           </div>
         </div>
       </div>
@@ -228,7 +273,17 @@ export default function Expense() {
         </div>
         <div className="row  border border-dark"></div>
       </div>
-      <div className="container  bg-body-secondary">
+      {list.length === 0 && (
+        <div className="container pt-5 ">
+          <div className="row  ">
+            <div class="alert alert-warning text-bg-info text-center  ">
+              no expense found, add some expense...
+            </div>
+          </div>
+        </div>
+      )}
+      {request && <LoadingSpinner />}
+      <div className="container  bg-body-secondary ">
         {list.map((item, ind) => {
           return (
             <div className="row " key={ind}>

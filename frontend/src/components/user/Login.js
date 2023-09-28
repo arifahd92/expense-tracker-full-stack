@@ -1,60 +1,61 @@
-import React, { useState } from "react";
-import { EyeFill, EyeSlashFill } from "react-bootstrap-icons"; // Import Bootstrap Icons
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+import React, {useState} from 'react';
+import './user.css';
+import {EyeFill, EyeSlashFill} from 'react-bootstrap-icons'; // Import Bootstrap Icons
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+function Login () {
+  const [formData, setFormData] = useState ({
+    email: '',
+    password: '',
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [showPassword, setShowPassword] = useState (false);
+  const navigate = useNavigate ();
+  const handleChange = e => {
+    const {name, value} = e.target;
 
-    setFormData({
+    setFormData ({
       ...formData,
       [name]: value,
     });
   };
 
   const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword (!showPassword);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault ();
 
     try {
-      console.log("cookie");
-      console.log(document.cookie);
-      const response = await axios.post(
-        "http://localhost:4000/login",
+      console.log ('cookie');
+      console.log (document.cookie);
+      const response = await axios.post (
+        'http://localhost:4000/login',
         formData
       );
 
       if (response.status !== 200) {
-        alert("Something went wrong");
+        alert ('Something went wrong');
         return;
       }
       const token = response.data.token;
-      const userId = response.data.userId.toString();
-      localStorage.setItem("userToken", token);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("userEmail", formData.email);
-      alert("success");
-      setFormData({ email: "", password: "" });
-      navigate(`/expense/${userId}`);
+      const userId = response.data.userId.toString ();
+      localStorage.setItem ('userToken', token);
+      localStorage.setItem ('userId', userId);
+      localStorage.setItem ('userEmail', formData.email);
+      alert ('success');
+      setFormData ({email: '', password: ''});
+      navigate (`/expense`);
     } catch (err) {
       //response object will be stored in err variable of catch
-      console.log(err.response.data.error);
-      alert(err.response.data.error);
+      console.log (err.response.data.error);
+      alert (err.response.data.error);
     }
   };
 
   return (
-    <>
+    <div className="mainContainer">
       <div className="container mt-3 d-flex justify-content-center">
         <h3 className="text-secondary">login</h3>
       </div>
@@ -78,7 +79,7 @@ function Login() {
             <div className="input-group">
               <input
                 required
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 className="form-control"
                 id="password"
                 name="password"
@@ -100,7 +101,7 @@ function Login() {
           <div className="d-flex justify-content-center text-primary">
             <div
               className="signup  border-bottom  cursor-pointer"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate ('/register')}
             >
               Not registered yet? Register
             </div>
@@ -111,7 +112,7 @@ function Login() {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

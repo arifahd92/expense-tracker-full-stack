@@ -1,0 +1,19 @@
+.mainContainer{
+    width: 45vw;
+     margin-left: 25%;
+    
+}
+@media (max-width: 1150px) {
+    .mainContainer{
+        width: 55vw;
+         margin-left: 25%;
+        
+    }
+ }
+@media (max-width: 768px) {
+    .mainContainer{
+        width: 90vw;
+         margin-left: 5vw;
+        
+    }
+ }
