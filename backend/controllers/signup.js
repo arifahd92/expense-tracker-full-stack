@@ -1,7 +1,23 @@
 const bcrypt = require ('bcrypt');
 const Signup = require ('../models/signup');
+const jwt = require ('jsonwebtoken');
 const saltRounds = 10;
 
+const secretKey = process.env.JWT_TOKEN;
+
+const generateToken = data => {
+  try {
+    console.log ({generateToken: data});
+    const id = data.id;
+    const email = data.email;
+    const token = jwt.sign ({id, email}, secretKey, {
+      expiresIn: '112h',
+    });
+    return token;
+  } catch (error) {
+    console.log (error.message);
+  }
+};
 const signup = async (req, res) => {
   try {
     console.log ('signup user');
@@ -26,8 +42,10 @@ const signup = async (req, res) => {
           email,
           password: hashedPassword,
         });
-        console.log (data);
-        res.json ({message: 'Success'});
+        console.log ('im data');
+        console.log (data.dataValues);
+        const token = generateToken (data.dataValues);
+        res.json ({message: 'Success', token, id: data.dataValues.id});
       } catch (error) {
         console.error (error);
         res

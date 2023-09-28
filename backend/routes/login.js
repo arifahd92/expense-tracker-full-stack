@@ -1,5 +1,6 @@
 const express = require ('express');
-const {login, generateToken} = require ('../controllers/login');
+const {login} = require ('../controllers/login');
+const {generateToken} = require ('../middleware/generateToken');
 const router = express.Router ();
 
 router.post ('/login', generateToken, login);

@@ -1,10 +1,11 @@
 const Expense = require ('../models/expense');
 const User = require ('../models/signup');
 
-//m- post=>add-expense/:userId
+//m- post=>add-expense
 const addExpense = async (req, res) => {
   try {
-    const {userId} = req.params;
+    // const {userId} = req.params;
+    const userId = req.userId;
     const input = req.body;
     const createdData = await Expense.create ({...input, userId});
     console.log ('added');
@@ -15,10 +16,11 @@ const addExpense = async (req, res) => {
   }
 };
 
-// m-get => get-expense/:userId
+// m-get => get-expense
 const getExpense = async (req, res) => {
   try {
-    const {userId} = req.params;
+    // const {userId} = req.params;
+    const userId = req.userId;
     const data = await Expense.findAll ({where: {userId}});
     res.send (data);
   } catch (error) {

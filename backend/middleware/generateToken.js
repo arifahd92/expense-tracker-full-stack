@@ -46,8 +46,4 @@ const generateToken = async (req, res, next) => {
     res.status (500).json ({error: 'Internal server error backend'});
   }
 };
-
-const login = async (req, res) => {
-  return res.send ({message: 'success', token: res.token, userId: res.id});
-};
-module.exports = {login, generateToken};
+module.exports = {generateToken};

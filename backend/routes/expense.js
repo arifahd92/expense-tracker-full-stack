@@ -5,10 +5,11 @@ const {
   deleteExpense,
   updateExpense,
 } = require ('../controllers/expense');
+const {findId} = require ('../middleware/authenticate');
 const router = express.Router ();
-router.get ('/get-expense/:userId', getExpense);
+router.get ('/get-expense', findId, getExpense);
 
-router.post ('/add-expense/:userId', addExpense);
+router.post ('/add-expense/', findId, addExpense);
 
 router.delete ('/delete-expense/:expenseId', deleteExpense);
 

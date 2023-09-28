@@ -1,3 +1,5 @@
+const dotenv = require ('dotenv');
+dotenv.config ();
 const express = require ('express');
 const app = express ();
 const cors = require ('cors');
@@ -18,6 +20,7 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+console.log (process.env.JWT_TOKEN);
 app.use (cors (corsOptions));
 app.use (express.json ());
 app.use (cookieParser ());
