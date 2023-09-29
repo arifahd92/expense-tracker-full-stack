@@ -3,6 +3,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addUpdate,
+  deleteExpense,
+  fetchExpenses,
+} from "../../store/slices/expense";
 
 export default function Expense() {
   const [list, setList] = useState([]);
@@ -16,42 +22,32 @@ export default function Expense() {
     description: "",
   });
   const [showInput, setShowInput] = useState(false);
-  const { userId } = useParams();
+
   const userEmail = localStorage.getItem("userEmail");
   const userToken = localStorage.getItem("userToken");
   const navigate = useNavigate();
+  const { expense, isLoading, unAuthorize } = useSelector(
+    (state) => state.expense
+  );
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const getExpense = async () => {
-      try {
-        setRequest(true);
-        const response = await axios.get(`http://localhost:4000/get-expense`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: userToken,
-          },
-        });
-        console.log("get data response");
-        console.log(response);
-        if (response.status !== 200) {
-          alert("something went wrong");
-          setRequest(false);
-        }
-        console.log(response.data);
-        setList(response.data);
-        setRequest(false);
-      } catch (err) {
-        if (err.response.data.verification === false) {
-          console.log("invalid token");
-          navigate("/");
-        }
-        alert(err.response.data.error);
-      }
+    console.log("useEffect of expense ");
+    const getExpense = () => {
+      dispatch(fetchExpenses());
+      console.log({ expense });
     };
-    if (userToken) {
+    getExpense();
+    /*
+    if (!unAuthorize) {
       getExpense();
-    } else {
+    } else if (unAuthorize) {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userToken");
       navigate("/");
     }
+    */
   }, []);
   //handle changes in input fields
   const handleinputchange = (e) => {
@@ -61,51 +57,33 @@ export default function Expense() {
   // submit form data add/update**************
   const submitHandeler = async (e, ind = -1) => {
     e.preventDefault();
-    try {
-      setRequest(true);
-      let response;
-      let addURL = `http://localhost:4000/add-expense`;
-      let updateURL = `http://localhost:4000/update-expense/${expenseId}`;
-      if (editFlag) {
-        response = await axios.put(updateURL, input);
-      } else {
-        response = await axios.post(addURL, input, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: userToken,
-          },
-        });
-      }
-
-      console.log(response);
-      const data = response.data;
-      console.log("post data");
-      console.log(data);
-      const updated = [...list, data];
-      setList(updated);
-      if (editFlag) {
-        const updated = [...list];
-        updated[editIndex] = input;
-        setList(updated);
-        setEditFlag(false);
-        setExpenseId(-1);
-        setEditIndex(-1);
-      }
-      setInput({ amount: "", catagory: "", description: "" });
-      setRequest(false);
-    } catch (error) {
-      alert(error.message);
-      if (error.response.data.verification === false) {
-        console.log("invalid token");
-        setRequest(false);
-        navigate("/");
-      }
+    dispatch(
+      addUpdate({
+        expenseId,
+        editFlag,
+        editIndex,
+        input,
+      })
+    );
+    setInput({
+      amount: "",
+      catagory: "",
+      description: "",
+    });
+    setExpenseId(-1);
+    setEditFlag(false);
+    setEditIndex(-1);
+    if (unAuthorize) {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userName");
+      navigate("/");
     }
   };
 
   //************Update ui **********
   const handleEdit = (ind, id) => {
-    const target = list[ind];
+    const target = expense[ind];
     setInput(target);
     setExpenseId(id);
     setEditFlag(true);
@@ -114,15 +92,19 @@ export default function Expense() {
   };
 
   //delete expense
-  const handleDelete = async (id, index) => {
+  const handleDelete = (index, id) => {
     console.log("i got clicked");
-    try {
-      const confirm = window.confirm(
-        "Are you sure data will be deleted permanently?"
-      );
-      if (!confirm) {
-        return;
-      }
+    console.log({ id, index });
+    // try {
+    const confirm = window.confirm(
+      "Are you sure data will be deleted permanently?"
+    );
+    if (!confirm) {
+      return;
+    }
+
+    dispatch(deleteExpense({ index, id })); // only one argument is accepted
+    /*
       const expenseId = id;
       setRequest(true);
       const response = await axios.delete(
@@ -138,7 +120,10 @@ export default function Expense() {
       updated.splice(index, 1);
       setList(updated);
       setRequest(false);
-    } catch (error) {
+      */
+    // }
+    /*
+     catch (error) {
       console.log(error.message);
       setRequest(false);
       alert(error.message);
@@ -146,7 +131,7 @@ export default function Expense() {
         console.log("invalid token");
         navigate("/");
       }
-    }
+    }*/
   };
   const handleLogout = () => {
     localStorage.removeItem("userId");
@@ -273,7 +258,7 @@ export default function Expense() {
         </div>
         <div className="row  border border-dark"></div>
       </div>
-      {list.length === 0 && (
+      {expense.length === 0 && (
         <div className="container pt-5 ">
           <div className="row  ">
             <div class="alert alert-warning text-bg-info text-center  ">
@@ -282,9 +267,10 @@ export default function Expense() {
           </div>
         </div>
       )}
-      {request && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
       <div className="container  bg-body-secondary ">
-        {list.map((item, ind) => {
+        {console.log("updated")}
+        {expense.map((item, ind) => {
           return (
             <div className="row " key={ind}>
               <div className="col-1">{ind + 1}</div>
@@ -307,7 +293,7 @@ export default function Expense() {
               </div>
               <div className="col-2  text-center ">
                 <button
-                  onClick={() => handleDelete(item.id, ind)}
+                  onClick={() => handleDelete(ind, item.id)}
                   className="btn bg-danger float-end "
                 >
                   delete

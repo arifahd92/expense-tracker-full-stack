@@ -28,8 +28,7 @@ function Login () {
     e.preventDefault ();
 
     try {
-      console.log ('cookie');
-      console.log (document.cookie);
+     
       const response = await axios.post (
         'http://localhost:4000/login',
         formData
