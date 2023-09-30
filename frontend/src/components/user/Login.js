@@ -26,7 +26,7 @@ function Login () {
 
   const handleSubmit = async e => {
     e.preventDefault ();
-
+    alert ('logging in');
     try {
       const response = await axios.post (
         'http://localhost:4000/login',
@@ -37,11 +37,14 @@ function Login () {
         alert ('Something went wrong');
         return;
       }
-      const token = response.data.token;
+      console.log (response);
+      const {token} = response.data;
+      const premium = response.data.premium;
       const userId = response.data.userId.toString ();
       localStorage.setItem ('userToken', token);
       localStorage.setItem ('userId', userId);
       localStorage.setItem ('userEmail', formData.email);
+      localStorage.setItem ('premium', JSON.stringify (premium));
       alert ('success');
       setFormData ({email: '', password: ''});
       navigate (`/expense`);
@@ -50,7 +53,7 @@ function Login () {
 
       console.log ('chec check');
       console.log ('check', err);
-      alert (err.response.data.error);
+      // alert (err.response.data.error);
     }
   };
 

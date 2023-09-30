@@ -44,6 +44,7 @@ function Signup () {
       localStorage.setItem ('userToken', data.token);
       localStorage.setItem ('userId', data.id);
       localStorage.setItem ('userEmail', formData.email);
+      localStorage.setItem ('premium', JSON.stringify (response.data.premium));
       alert ('success');
       setFormData ({name: '', email: '', password: ''});
       navigate ('/expense');
