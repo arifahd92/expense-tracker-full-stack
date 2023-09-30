@@ -28,7 +28,6 @@ function Login () {
     e.preventDefault ();
 
     try {
-     
       const response = await axios.post (
         'http://localhost:4000/login',
         formData
@@ -48,7 +47,9 @@ function Login () {
       navigate (`/expense`);
     } catch (err) {
       //response object will be stored in err variable of catch
-      console.log (err.response.data.error);
+
+      console.log ('chec check');
+      console.log ('check', err);
       alert (err.response.data.error);
     }
   };

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//import Razorpay from "razorpay";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
@@ -9,46 +9,47 @@ import {
   deleteExpense,
   fetchExpenses,
 } from "../../store/slices/expense";
+import Leaderboard from "./Leaderboard";
+import Header from "./Header";
 
 export default function Expense() {
-  const [list, setList] = useState([]);
   const [editIndex, setEditIndex] = useState(-1);
   const [expenseId, setExpenseId] = useState(-1);
   const [editFlag, setEditFlag] = useState(false);
-  const [request, setRequest] = useState(false);
+
   const [input, setInput] = useState({
     amount: "",
     catagory: "",
     description: "",
   });
   const [showInput, setShowInput] = useState(false);
-
   const userEmail = localStorage.getItem("userEmail");
-  const userToken = localStorage.getItem("userToken");
   const navigate = useNavigate();
-  const { expense, isLoading, unAuthorize } = useSelector(
+  // useSelctor*******************
+  const { expense, isLoading, unAuthorize, total } = useSelector(
     (state) => state.expense
   );
+  const { boardFlag } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const userToken = localStorage.getItem("userToken");
   useEffect(() => {
+    console.log("expense got re mounted");
+    const userToken = localStorage.getItem("userToken");
     console.log("useEffect of expense ");
     const getExpense = () => {
-      dispatch(fetchExpenses());
+      dispatch(fetchExpenses(userToken));
       console.log({ expense });
     };
     getExpense();
-    /*
     if (!unAuthorize) {
+      // valid user
       getExpense();
-    } else if (unAuthorize) {
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("userToken");
-      navigate("/");
+
+      return;
     }
-    */
   }, []);
+
+  console.log({ expense });
   //handle changes in input fields
   const handleinputchange = (e) => {
     let { id, value } = e.target;
@@ -57,12 +58,14 @@ export default function Expense() {
   // submit form data add/update**************
   const submitHandeler = async (e, ind = -1) => {
     e.preventDefault();
+    const userToken = localStorage.getItem("userToken");
     dispatch(
       addUpdate({
         expenseId,
         editFlag,
         editIndex,
         input,
+        userToken,
       })
     );
     setInput({
@@ -74,10 +77,7 @@ export default function Expense() {
     setEditFlag(false);
     setEditIndex(-1);
     if (unAuthorize) {
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("userName");
-      navigate("/");
+      handleLogout();
     }
   };
 
@@ -104,57 +104,18 @@ export default function Expense() {
     }
 
     dispatch(deleteExpense({ index, id })); // only one argument is accepted
-    /*
-      const expenseId = id;
-      setRequest(true);
-      const response = await axios.delete(
-        `http://localhost:4000/delete-expense/${expenseId}`
-      );
-      if (response.status != 200) {
-        alert("some thing went wrong try again");
-        setRequest(false);
-        return;
-      }
-      const data = await response.data;
-      let updated = [...list];
-      updated.splice(index, 1);
-      setList(updated);
-      setRequest(false);
-      */
-    // }
-    /*
-     catch (error) {
-      console.log(error.message);
-      setRequest(false);
-      alert(error.message);
-      if (error.response.data.verification === false) {
-        console.log("invalid token");
-        navigate("/");
-      }
-    }*/
   };
-  const handleLogout = () => {
+  function handleLogout() {
     localStorage.removeItem("userId");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userToken");
     navigate("/");
-  };
+  }
+
   return (
     <>
-      <div className="container  container-sm mt-5 w-sm-75">
-        <div className="row   ">
-          <div className="col-8 text-warning  ">{userEmail}</div>
-          <div className="col  ">
-            <button
-              className="btn btn-warning  float-end"
-              onClick={handleLogout}
-            >
-              logout
-            </button>
-          </div>
-        </div>
-      </div>
-      <hr />
+      <Header />
+      {boardFlag && <Leaderboard />}
       <div className="container mt-1 w-sm-75  ">
         <div className="row d-flex justify-content-end ">
           <div className="col-4 ">
@@ -303,6 +264,10 @@ export default function Expense() {
             </div>
           );
         })}
+        <div className="row bg-info p-2">
+          <div className="col float-start ">Total Of Expense</div>
+          <div className="col   d-flex justify-content-end  ">$ {total}</div>
+        </div>
       </div>
     </>
   );
