@@ -25,14 +25,17 @@ const generateToken = async (req, res, next) => {
           // password mtched
           console.log (result); //true
           const token = jwt.sign (
-            {id: exists.id, email: req.body.email},
+            {id: exists.id, email: req.body.email, premium: exists.premium},
             secretKey,
             {
               expiresIn: '112h',
             }
           );
-          res.token = token;
-          res.id = exists.id;
+          console.log (token);
+          console.log (exists);
+          req.token = token;
+          req.id = exists.id;
+          req.premium = exists.premium;
           next ();
         }
         if (!result) {

@@ -13,5 +13,8 @@ const User = sequelize.define ('user', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  premium: {
+    type: Sequelize.BOOLEAN,
+  },
 });
 module.exports = User;

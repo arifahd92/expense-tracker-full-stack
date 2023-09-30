@@ -43,11 +43,17 @@ const signup = async (req, res) => {
           name,
           email,
           password: hashedPassword,
+          premium: false,
         });
         console.log ('im data');
         console.log (data.dataValues);
         const token = generateToken (data.dataValues);
-        res.json ({message: 'Success', token, id: data.dataValues.id});
+        res.json ({
+          message: 'Success',
+          token,
+          id: data.dataValues.id,
+          premium: data.dataValues.premium,
+        });
       } catch (error) {
         console.error (error);
         res
