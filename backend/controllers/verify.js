@@ -2,6 +2,8 @@
 // if user has token then we will  redirect user from sign up /login page to expense page directly by verifying
 
 const jwt = require ('jsonwebtoken');
+
+// m-post=> /verify-user
 const verify = async (req, res) => {
   const {id, email} = req.body;
   const token = req.headers.authorization;

@@ -21,8 +21,10 @@ const generateToken = data => {
 const signup = async (req, res) => {
   try {
     console.log ('signup user');
+    console.log (req.body);
     const {name, email, password} = req.body;
-    const exists = await Signup.findOne ({where: {email}});
+
+    exists = await Signup.findOne ({where: {email}});
 
     if (exists) {
       return res.status (409).json ({error: 'User already exists'});

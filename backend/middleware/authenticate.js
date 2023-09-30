@@ -4,6 +4,7 @@ const findId = (req, res, next) => {
   try {
     console.log ('find id middleware inside authenticate');
     const token = req.headers.authorization;
+    console.log ({token});
     const decodeToken = jwt.verify (token, secretKey);
     console.log ({decodeToken});
     req.userId = decodeToken.id;
@@ -11,7 +12,7 @@ const findId = (req, res, next) => {
     next ();
   } catch (error) {
     console.log (error.message);
-    res.status (401).json ({error: 'Unauthorized', verification: false});
+    res.status (401).send ({error: 'Unauthorized', verification: false});
   }
 };
 module.exports = {findId};

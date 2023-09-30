@@ -19,8 +19,10 @@ const addExpense = async (req, res) => {
 // m-get => get-expense
 const getExpense = async (req, res) => {
   try {
+    console.log ('getExpense controlller');
     // const {userId} = req.params;
     const userId = req.userId;
+    console.log ({userId});
     const data = await Expense.findAll ({where: {userId}});
     res.send (data);
   } catch (error) {

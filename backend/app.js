@@ -11,8 +11,11 @@ const signupRouter = require ('./routes/signup');
 const loginRouter = require ('./routes/login');
 const expenseRouter = require ('./routes/expense');
 const verifyRouter = require ('./routes/verify');
+const razorRouter = require ('./routes/razor');
+const userRouter = require ('./routes/user');
 const Expense = require ('./models/expense');
 const User = require ('./models/signup');
+const Order = require ('./models/order');
 //************* */
 
 const corsOptions = {
@@ -20,7 +23,6 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
-console.log (process.env.JWT_TOKEN);
 app.use (cors (corsOptions));
 app.use (express.json ());
 app.use (cookieParser ());
@@ -28,8 +30,12 @@ app.use (signupRouter);
 app.use (loginRouter);
 app.use (expenseRouter);
 app.use (verifyRouter);
+app.use (razorRouter);
+app.use (userRouter);
 User.hasMany (Expense);
 Expense.belongsTo (User);
+User.hasMany (Order);
+Order.belongsTo (User);
 sequelize
   .sync ()
   .then (() => {
