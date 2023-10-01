@@ -19,16 +19,30 @@ const addExpense = async (req, res) => {
 // m-get => get-expense
 const getExpense = async (req, res) => {
   try {
-    console.log ('getExpense controlller');
-    // const {userId} = req.params;
+    console.log ('getExpense controller');
     const userId = req.userId;
+    const token = req.cookies.token;
+    console.log ('token from cookie*********************', token);
+  
+    const user = await User.findOne ({where: {id: userId}});
+
+    if (!user) {
+      return res.status (404).json ({error: 'User not found'});
+    }
+
+    const premium = user.premium;
     console.log ({userId});
-    const data = await Expense.findAll ({where: {userId}});
-    res.send (data);
+
+  
+    const expenses = await Expense.findAll ({where: {userId}});
+
+    res.json ({data: expenses, premium: premium});
   } catch (error) {
-    res.send ({error: 'something went wrong in getting data'});
+    console.error (error.message);
+    res.status (500).json ({error: 'Something went wrong in getting data'});
   }
 };
+
 //m-delete =>delete-expense/:expenseId
 const deleteExpense = async (req, res) => {
   try {

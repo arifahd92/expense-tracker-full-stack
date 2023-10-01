@@ -10,7 +10,7 @@ const generateToken = data => {
     console.log ({generateToken: data});
     const id = data.id;
     const email = data.email;
-    const token = jwt.sign ({id, email}, secretKey, {
+    const token = jwt.sign ({id, email, premium: false}, secretKey, {
       expiresIn: '112h',
     });
     return token;

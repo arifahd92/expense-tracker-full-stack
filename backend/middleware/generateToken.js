@@ -1,5 +1,6 @@
 const bcrypt = require ('bcrypt');
 const jwt = require ('jsonwebtoken');
+const cookie = require ('cookie');
 const Signup = require ('../models/signup');
 const secretKey = process.env.JWT_TOKEN;
 const generateToken = async (req, res, next) => {
@@ -32,7 +33,19 @@ const generateToken = async (req, res, next) => {
             }
           );
           console.log (token);
-          console.log (exists);
+          console.log ('settig cookie ******************************');
+          res.setHeader (
+            'Set-Cookie',
+            cookie.serialize ('token', token, {
+              httpOnly: false,
+              maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+              sameSite: 'strict',
+              secure: true,
+              path: '/',
+            })
+          );
+          console.log ('cookie set');
+          // console.log (exists);
           req.token = token;
           req.id = exists.id;
           req.premium = exists.premium;
