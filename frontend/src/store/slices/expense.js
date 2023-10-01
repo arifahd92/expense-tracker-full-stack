@@ -4,6 +4,7 @@ const initialState = {
   expense: [],
   isLoading: false,
   unAuthorize: false,
+  premium: false,
   total: 0,
 };
 //const userToken = localStorage.getItem("userToken");
@@ -20,18 +21,22 @@ export const fetchExpenses = createAsyncThunk(
         },
       });
       console.log("get data response inside fetch async");
-      const data = response.data;
+      const data = response.data.data;
+      console.log(data.data);
+      const premium = response.data.premium;
+      console.log({ premium: premium });
       const total = data.reduce(
         (accumulator, item) => accumulator + +item.amount,
         0
       );
       console.log({ total });
-      return { data, total };
+      return { data, total, premium: premium };
     } catch (error) {
       // Handle the error response here
       console.error("Error fetching expenses:", error.response.data);
 
       if (error.response.data.verification === false) {
+        console.log(error);
         throw error;
         // Re-throw the error so it gets caught in the Redux slice
       }
@@ -118,6 +123,7 @@ const expenseSlice = createSlice({
         isLoading: false,
         unAuthorize: false,
         total: 0,
+        premium: false,
       };
     },
   },
@@ -127,6 +133,7 @@ const expenseSlice = createSlice({
       state.isLoading = false;
       state.unAuthorize = false;
       state.total = action.payload.total;
+      state.premium = action.payload.premium;
     },
     [fetchExpenses.pending]: (state, action) => {
       state.isLoading = true;

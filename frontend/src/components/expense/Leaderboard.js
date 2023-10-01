@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 export default function Leaderboard() {
   const userToken = localStorage.getItem("userToken");
-  const [users, setUsers] = useState([
-    { name: "arif", total: 30 },
-    { name: "arif", total: 30 },
-  ]);
+  const [users, setUsers] = useState([]);
+  const { darkFlag } = useSelector((state) => state.user);
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
     const fetchUser = async () => {
@@ -43,15 +42,18 @@ export default function Leaderboard() {
   }, []);
   return (
     <div
-      className="leaderboardContainer border bg-info "
+      className={`leaderboardContainer border bg-info ${
+        darkFlag && "bg-black text-info"
+      } `}
       style={{
         position: "absolute",
         minHeight: "80vh",
         width: "100vw",
-        top: "148px",
+        top: "170px",
+        zIndex: 5,
       }}
     >
-      <div className="container">
+      <div className={`container ${darkFlag && "bg-black text-black"} mt-4`}>
         <div className="row  border-bottom-5 ">
           <h4 className=" d-flex justify-content-center bg-info bg-secondary-subtle p-2 ">
             LEADER BOARD

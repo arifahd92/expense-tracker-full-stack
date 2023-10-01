@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   login: true,
   boardFlag: false,
+  darkFlag: false,
 };
 const user = createSlice ({
   initialState,
@@ -16,7 +17,10 @@ const user = createSlice ({
         boardFlag: false,
       };
     },
+    darkFlagHandel: (state, action) => {
+      state.darkFlag = action.payload;
+    },
   },
 });
-export const {toggleBoardFlag, clearUserState} = user.actions;
+export const {toggleBoardFlag, clearUserState, darkFlagHandel} = user.actions;
 export default user.reducer;

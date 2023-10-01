@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-//import  Razorpay  from "razorpay";
+import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleBoardFlag, clearUserState } from "../../store/slices/header";
+import {
+  toggleBoardFlag,
+  clearUserState,
+  darkFlagHandel,
+} from "../../store/slices/header";
 import { clearExpenseState } from "../../store/slices/expense";
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [nightMode, setNightMode] = useState(false);
   const userEmail = localStorage.getItem("userEmail");
   const userToken = localStorage.getItem("userToken");
-  const { boardFlag } = useSelector((state) => state.user);
+  const { boardFlag, darkFlag } = useSelector((state) => state.user);
+  const { premium } = useSelector((state) => state.expense);
   console.log({ boardFlag });
   const handleLogout = () => {
     const confirm = window.confirm("Are you sure");
@@ -107,10 +113,27 @@ export default function Header() {
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   }
+  const handleLeaderboard = () => {
+    if (!premium) {
+      alert("only for premium user's");
+      return;
+    }
+    dispatch(toggleBoardFlag());
+  };
+  const handleNightmode = (e) => {
+    console.log(e.target.checked);
 
+    if (premium) {
+      setNightMode(!nightMode);
+      dispatch(darkFlagHandel(!nightMode));
+      return;
+    }
+    alert("only for premium user's");
+  };
+  console.log({ darkFlag: darkFlag });
   return (
-    <>
-      <div className="container  container-sm mt-5 w-sm-75">
+    <div className={darkFlag && "bg-black text-white"}>
+      <div className={`container   container-sm mt-1 w-sm-75 `}>
         <div className="row   ">
           <div className="col text-warning  ">{userEmail}</div>
 
@@ -123,26 +146,47 @@ export default function Header() {
             </button>
           </div>
         </div>
+
         <div className="row">
-          <div className="col  ">
-            <button
-              className=" btn btn-outline-primary   "
-              onClick={buyPremium}
-            >
-              buy premium
-            </button>
+          {!premium && (
+            <div className="col  ">
+              <button
+                className=" btn btn-outline-primary   "
+                onClick={buyPremium}
+              >
+                buy premium
+              </button>
+            </div>
+          )}
+          {premium && (
+            <div className="col ">
+              <span className="text-bg-success  text-center p-2 ">
+                Premium user
+              </span>
+            </div>
+          )}
+          <div className="col d-flex justify-content-center  ">
+            <span>dark mode</span>
+            <label className="switch mt-1 ">
+              <input
+                type="checkbox"
+                checked={nightMode}
+                onChange={handleNightmode}
+              />
+              <span className="slider round"></span>
+            </label>
           </div>
           <div className="col">
             <button
               className=" btn btn-outline-primary float-end mt-1   "
-              onClick={() => dispatch(toggleBoardFlag())}
+              onClick={handleLeaderboard}
             >
-              {boardFlag ? "hide leader board" : " show leader board"}
+              {boardFlag ? "hide" : "Leader board"}
             </button>
           </div>
         </div>
       </div>
       <hr />
-    </>
+    </div>
   );
 }

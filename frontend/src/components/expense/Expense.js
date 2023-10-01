@@ -196,7 +196,8 @@ export default function Expense() {
           </form>
         </div>
       )}
-      <div className=" container  container-sm-fluid mt-5 ">
+      <hr />
+      <div className=" container  container-sm-fluid mt-5 border  ">
         <div className="row ">
           <div className="col-1">
             <h6>#</h6>
@@ -220,7 +221,7 @@ export default function Expense() {
         <div className="row  border border-dark"></div>
       </div>
       {expense.length === 0 && (
-        <div className="container pt-5 ">
+        <div className="container text-black pt-5 ">
           <div className="row  ">
             <div class="alert alert-warning text-bg-info text-center  ">
               no expense found, add some expense...
@@ -229,46 +230,55 @@ export default function Expense() {
         </div>
       )}
       {isLoading && <LoadingSpinner />}
-      <div className="container  bg-body-secondary ">
-        {console.log("updated")}
-        {expense.map((item, ind) => {
-          return (
-            <div className="row " key={ind}>
-              <div className="col-1">{ind + 1}</div>
-              <div className="col-2  ">{item.amount}$</div>
-              <div className="col-2  text-center">{item.catagory}</div>
-              <div
-                className="col-3  d-flex flex-wrap "
-                style={{ overflowX: "auto" }}
-              >
-                {item.description}
-              </div>
-              <div className="col-2  ">
-                <button
-                  className="btn  btn-warning"
-                  onClick={() => handleEdit(ind, item.id)}
+      {expense.length > 0 && (
+        <div
+          className="container  bg-body-secondary  "
+          style={{ minHeight: "50vh" }}
+        >
+          {console.log("updated")}
+          {expense.map((item, ind) => {
+            return (
+              <div className="row text-black  " key={ind}>
+                <div className="col-1">{ind + 1}</div>
+                <div className="col-2  ">{item.amount}$</div>
+                <div className="col-2  text-center">{item.catagory}</div>
+                <div
+                  className="col-3  d-flex flex-wrap "
+                  style={{ overflowX: "auto" }}
                 >
-                  {" "}
-                  edit
-                </button>
+                  {item.description}
+                </div>
+                <div className="col-2  ">
+                  <button
+                    className="btn  btn-warning"
+                    onClick={() => handleEdit(ind, item.id)}
+                  >
+                    {" "}
+                    edit
+                  </button>
+                </div>
+                <div className="col-2  text-center ">
+                  <button
+                    onClick={() => handleDelete(ind, item.id)}
+                    className="btn bg-danger float-end "
+                  >
+                    delete
+                  </button>
+                </div>
+                <hr />
               </div>
-              <div className="col-2  text-center ">
-                <button
-                  onClick={() => handleDelete(ind, item.id)}
-                  className="btn bg-danger float-end "
-                >
-                  delete
-                </button>
-              </div>
-              <hr />
-            </div>
-          );
-        })}
-        <div className="row bg-info p-2">
-          <div className="col float-start ">Total Of Expense</div>
-          <div className="col   d-flex justify-content-end  ">$ {total}</div>
+            );
+          })}
         </div>
-      </div>
+      )}
+      {expense.length > 0 && (
+        <div className="container">
+          <div className="row bg-info p-2">
+            <div className="col float-start ">Total Of Expense</div>
+            <div className="col   d-flex justify-content-end  ">$ {total}</div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
