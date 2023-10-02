@@ -1,4 +1,3 @@
-
 const dotenv = require ('dotenv');
 dotenv.config ();
 const express = require ('express');
@@ -13,7 +12,7 @@ const loginRouter = require ('./routes/login');
 const expenseRouter = require ('./routes/expense');
 const verifyRouter = require ('./routes/verify');
 const razorRouter = require ('./routes/razor');
-const userRouter = require ('./routes/user');
+const premiumRouter = require ('./routes/premium');
 const Expense = require ('./models/expense');
 const User = require ('./models/signup');
 const Order = require ('./models/order');
@@ -32,7 +31,7 @@ app.use (loginRouter);
 app.use (expenseRouter);
 app.use (verifyRouter);
 app.use (razorRouter);
-app.use (userRouter);
+app.use (premiumRouter);
 User.hasMany (Expense);
 Expense.belongsTo (User);
 User.hasMany (Order);
