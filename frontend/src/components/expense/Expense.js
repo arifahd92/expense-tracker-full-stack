@@ -29,12 +29,12 @@ export default function Expense() {
   const { expense, isLoading, unAuthorize, total } = useSelector(
     (state) => state.expense
   );
-  const { boardFlag } = useSelector((state) => state.user);
+  const { boardFlag, darkFlag } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const userToken = localStorage.getItem("userToken");
+  let userToken = localStorage.getItem("userToken");
   useEffect(() => {
     console.log("expense got re mounted");
-    const userToken = localStorage.getItem("userToken");
+    userToken = localStorage.getItem("userToken");
     console.log("useEffect of expense ");
     const getExpense = () => {
       dispatch(fetchExpenses(userToken));
@@ -103,7 +103,7 @@ export default function Expense() {
       return;
     }
 
-    dispatch(deleteExpense({ index, id })); // only one argument is accepted
+    dispatch(deleteExpense({ index, id, userToken })); // only one argument is accepted
   };
   function handleLogout() {
     localStorage.removeItem("userId");
@@ -130,9 +130,13 @@ export default function Expense() {
         </div>
       </div>
       {showInput && (
-        <div className="container  mt-5  w-75  border-1 d-flex justify-content-center bg-body-secondary   ">
+        <div
+          className={`container  mt-5  w-75  border-1 d-flex justify-content-center bg-body-secondary ${
+            darkFlag && "bg-black "
+          }`}
+        >
           <form
-            className="mt-4 row "
+            className={`mt-4 row ${darkFlag && "bg-black"}`}
             style={{ width: "80%" }}
             onSubmit={submitHandeler}
           >
@@ -221,7 +225,11 @@ export default function Expense() {
         <div className="row  border border-dark"></div>
       </div>
       {expense.length === 0 && (
-        <div className="container text-black pt-5 ">
+        <div
+          className={`container text-black pt-5  ${
+            darkFlag && "bg-black text-white"
+          }`}
+        >
           <div className="row  ">
             <div class="alert alert-warning text-bg-info text-center  ">
               no expense found, add some expense...
@@ -232,7 +240,9 @@ export default function Expense() {
       {isLoading && <LoadingSpinner />}
       {expense.length > 0 && (
         <div
-          className="container  bg-body-secondary  "
+          className={`container  bg-body-secondary ${
+            darkFlag && "bg-black text-white"
+          } `}
           style={{ minHeight: "50vh" }}
         >
           {console.log("updated")}
@@ -274,8 +284,10 @@ export default function Expense() {
       {expense.length > 0 && (
         <div className="container">
           <div className="row bg-info p-2">
-            <div className="col float-start ">Total Of Expense</div>
-            <div className="col   d-flex justify-content-end  ">$ {total}</div>
+            <div className="col float-start text-white">Total Of Expense</div>
+            <div className="col   d-flex justify-content-end text-white ">
+              $ {total}
+            </div>
           </div>
         </div>
       )}

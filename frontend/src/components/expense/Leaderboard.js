@@ -1,59 +1,67 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-export default function Leaderboard() {
-  const userToken = localStorage.getItem("userToken");
-  const [users, setUsers] = useState([]);
-  const { darkFlag } = useSelector((state) => state.user);
-  useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {useSelector} from 'react-redux';
+export default function Leaderboard () {
+  const userToken = localStorage.getItem ('userToken');
+  const [users, setUsers] = useState ([]);
+  const {darkFlag} = useSelector (state => state.user);
+  useEffect (() => {
+    const userToken = localStorage.getItem ('userToken');
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/leader-board", {
-          headers: {
-            Authorization: userToken,
-          },
-        });
+        const response = await axios.get (
+          'http://localhost:4000/premium/leader-board',
+          {
+            headers: {
+              Authorization: userToken,
+            },
+          }
+        );
         const users = response.data;
+        console.log ('from leaderboard');
+        //getting sorted and grouped data
+        console.log (users);
+        setUsers (users);
+        /*
+        //with bad query***********
         const totalAmountArr = [];
-        users.forEach((element) => {
+        users.forEach (element => {
           let sum = 0;
-          element.expenses.forEach((expense) => {
+          element.expenses.forEach (expense => {
             sum += +expense.amount;
           });
-          totalAmountArr.push(sum);
+          totalAmountArr.push (sum);
         });
-        console.log(totalAmountArr);
+        console.log (totalAmountArr);
 
         let updatedUser = [];
 
         for (let i = 0; i < users.length; i++) {
-          const dummy = { ...users[i], total: totalAmountArr[i] };
+          const dummy = {...users[i], total: totalAmountArr[i]};
 
           updatedUser = [...updatedUser, dummy];
         }
-        updatedUser.sort((a, b) => b.total - a.total);
-        setUsers(updatedUser);
+        updatedUser.sort ((a, b) => b.total - a.total);
+        setUsers (updatedUser);
+        */
       } catch (error) {
-        console.log(error.response);
+        console.log (error.response);
       }
     };
-    fetchUser();
+    fetchUser ();
   }, []);
   return (
     <div
-      className={`leaderboardContainer border bg-info ${
-        darkFlag && "bg-black text-info"
-      } `}
+      className={`leaderboardContainer border bg-info ${darkFlag && 'bg-black text-info'} `}
       style={{
-        position: "absolute",
-        minHeight: "80vh",
-        width: "100vw",
-        top: "170px",
+        position: 'absolute',
+        minHeight: '80vh',
+        width: '100vw',
+        top: '170px',
         zIndex: 5,
       }}
     >
-      <div className={`container ${darkFlag && "bg-black text-black"} mt-4`}>
+      <div className={`container ${darkFlag && 'bg-black text-black'} mt-4`}>
         <div className="row  border-bottom-5 ">
           <h4 className=" d-flex justify-content-center bg-info bg-secondary-subtle p-2 ">
             LEADER BOARD
@@ -72,15 +80,18 @@ export default function Leaderboard() {
         </div>
 
         {users.length > 0 &&
-          users.map((user, ind) => {
+          users.map ((user, ind) => {
             return (
-              <div className="row bg-body-tertiary border mb-2 p-2">
+              <div
+                key={user.id}
+                className={`row bg-body-tertiary border mb-2 p-2 ${ind <= 2 && 'text-info'}`}
+              >
                 <div className="col  "># {ind + 1}</div>
                 <div className="col d-flex justify-content-center ">
                   {user.name}
                 </div>
                 <div className="col d-flex justify-content-end ">
-                  {user.total} $
+                  {user.totalExpenseAmount} $
                 </div>
               </div>
             );

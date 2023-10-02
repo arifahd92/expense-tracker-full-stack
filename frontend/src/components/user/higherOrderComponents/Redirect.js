@@ -46,7 +46,7 @@ export default function Redirect({ Component }) {
       }
     } catch (error) {
       console.log("from verification");
-      console.log(error);
+      alert("Chect your internet and try again");
       console.log("from verification");
       if (!error.response.data.verification) {
         localStorage.removeItem("userId");

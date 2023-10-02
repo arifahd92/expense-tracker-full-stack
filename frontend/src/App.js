@@ -5,6 +5,7 @@ import Login from './components/user/Login';
 import Expense from './components/expense/Expense';
 import Redirect from './components/user/higherOrderComponents/Redirect';
 import {useSelector} from 'react-redux';
+import ForgotPassword from './components/user/ForgotPassword';
 
 export default function App () {
   const {darkFlag} = useSelector (state => state.user);
@@ -15,6 +16,7 @@ export default function App () {
         <Route path="/" element={<Redirect Component={Login} />} />
         <Route path="/expense" element={<Redirect Component={Expense} />} />
         <Route path="/register" element={<Redirect Component={Signup} />} />
+        <Route path="/password/forgot" element={<ForgotPassword />} />
       </Routes>
     </div>
   );

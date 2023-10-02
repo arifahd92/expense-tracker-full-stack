@@ -21,19 +21,16 @@ export const fetchExpenses = createAsyncThunk(
         },
       });
       console.log("get data response inside fetch async");
-      const data = response.data.data;
-      console.log(data.data);
-      const premium = response.data.premium;
+      const { data, total, premium } = response.data;
+      console.log(data);
+      // const premium = response.data.premium;
       console.log({ premium: premium });
-      const total = data.reduce(
-        (accumulator, item) => accumulator + +item.amount,
-        0
-      );
+
       console.log({ total });
       return { data, total, premium: premium };
     } catch (error) {
       // Handle the error response here
-      console.error("Error fetching expenses:", error.response.data);
+      console.log("Error fetching expenses:", error.response.data);
 
       if (error.response.data.verification === false) {
         console.log(error);
@@ -54,7 +51,13 @@ export const deleteExpense = createAsyncThunk(
       console.log(payload.id);
       console.log(payload.index);
       const response = await axios.delete(
-        `http://localhost:4000/delete-expense/${expenseId}`
+        `http://localhost:4000/delete-expense/${expenseId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: payload.userToken,
+          },
+        }
       );
       if (response.status != 200) {
         alert("some thing went wrong try again");
@@ -83,7 +86,12 @@ export const addUpdate = createAsyncThunk(
       let addURL = `http://localhost:4000/add-expense`;
       let updateURL = `http://localhost:4000/update-expense/${expenseId}`;
       if (editFlag) {
-        response = await axios.put(updateURL, input);
+        response = await axios.put(updateURL, input, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userToken,
+          },
+        });
       } else {
         response = await axios.post(addURL, input, {
           headers: {
