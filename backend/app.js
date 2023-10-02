@@ -14,7 +14,7 @@ const verifyRouter = require ('./routes/verify');
 const razorRouter = require ('./routes/razor');
 const premiumRouter = require ('./routes/premium');
 const Expense = require ('./models/expense');
-const User = require ('./models/signup');
+const User = require ('./models/user');
 const Order = require ('./models/order');
 //************* */
 
@@ -41,7 +41,7 @@ sequelize
   .then (() => {
     app.listen (4000, err => {
       if (err) {
-        console.log (err);
+        console.log (err.message);
         return;
       }
       console.log ('listening at port 4000');

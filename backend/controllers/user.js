@@ -1,5 +1,5 @@
 const bcrypt = require ('bcrypt');
-const Signup = require ('../models/signup');
+const User = require ('../models/user');
 const jwt = require ('jsonwebtoken');
 const saltRounds = 10;
 
@@ -24,7 +24,7 @@ const signup = async (req, res) => {
     console.log (req.body);
     const {name, email, password} = req.body;
 
-    exists = await Signup.findOne ({where: {email}});
+    exists = await User.findOne ({where: {email}});
 
     if (exists) {
       return res.status (409).json ({error: 'User already exists'});
@@ -39,11 +39,12 @@ const signup = async (req, res) => {
 
       try {
         // Create the user with the hashed password
-        const data = await Signup.create ({
+        const data = await User.create ({
           name,
           email,
           password: hashedPassword,
           premium: false,
+          totalExpenseAmount: 0,
         });
         console.log ('im data');
         console.log (data.dataValues);

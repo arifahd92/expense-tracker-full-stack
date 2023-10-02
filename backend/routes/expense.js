@@ -11,8 +11,8 @@ router.get ('/get-expense', findId, getExpense);
 
 router.post ('/add-expense/', findId, addExpense);
 
-router.delete ('/delete-expense/:expenseId', deleteExpense);
+router.delete ('/delete-expense/:expenseId', findId, deleteExpense);
 
-router.put ('/update-expense/:expenseId', updateExpense);
+router.put ('/update-expense/:expenseId', findId, updateExpense);
 
 module.exports = router;

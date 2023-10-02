@@ -1,7 +1,7 @@
 const sequelize = require ('../db/connection');
 
 const Expense = require ('../models/expense');
-const User = require ('../models/signup');
+const User = require ('../models/user');
 //m-get => /premium-leaderboard
 const leaderboard = async (req, res, next) => {
   console.log ('leader board controller');
@@ -10,6 +10,8 @@ const leaderboard = async (req, res, next) => {
       attributes: [
         'id',
         'name',
+        'totalExpenseAmount',
+        /*
         [
           sequelize.fn ('SUM', sequelize.col ('Expenses.amount')),
           'totalExpenseAmount',
@@ -18,10 +20,11 @@ const leaderboard = async (req, res, next) => {
       include: [
         {
           model: Expense,
-          attributes: [],
+          attributes: [], // i just want use Expense model but dont want any field, mandatory for aggregation
         },
+        */
       ],
-      group: ['User.id', 'User.name'],
+      group: ['User.id'],
 
       order: [[sequelize.literal ('totalExpenseAmount'), 'DESC']],
     });
@@ -32,5 +35,6 @@ const leaderboard = async (req, res, next) => {
     console.log (err.message);
     res.send ({message: 'error'});
   }
+  //for more optemization we can use an extra coloumn  (totalExpenseAmount) in User table and we will not have to use aggregate function of sequelize
 };
 module.exports = {leaderboard};

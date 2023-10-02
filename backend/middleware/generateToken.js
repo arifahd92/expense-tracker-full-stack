@@ -1,14 +1,14 @@
 const bcrypt = require ('bcrypt');
 const jwt = require ('jsonwebtoken');
 const cookie = require ('cookie');
-const Signup = require ('../models/signup');
+const User = require ('../models/user');
 const secretKey = process.env.JWT_TOKEN;
 const generateToken = async (req, res, next) => {
   try {
     const {email, password} = req.body;
     let id;
     console.log (req.body);
-    const exists = await Signup.findOne ({where: {email}});
+    const exists = await User.findOne ({where: {email}});
 
     if (!exists) {
       return res.status (404).json ({error: 'user not found'});

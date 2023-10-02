@@ -1,6 +1,6 @@
 const Order = require ('../models/order');
 const Razorpay = require ('razorpay');
-const User = require ('../models/signup');
+const User = require ('../models/user');
 //m-get=> buy-premium
 /*
 const buyPremium = async (req, res, next) => {
