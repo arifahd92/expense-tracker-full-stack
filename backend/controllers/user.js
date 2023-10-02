@@ -6,7 +6,7 @@ const jwt = require ('jsonwebtoken');
 const saltRounds = 10;
 
 const secretKey = process.env.JWT_TOKEN;
-
+const sendinBlueApiKey = process.env.API_KEY;
 const generateToken = data => {
   try {
     console.log ({generateToken: data});
@@ -89,7 +89,7 @@ async function sendEmail({
     const response = await axios.post (apiUrl, emailData, {
       headers: {
         'Content-Type': 'application/json',
-        'api-key': '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',
+        'api-key': sendinBlueApiKey,
       },
     });
 
@@ -102,6 +102,7 @@ async function sendEmail({
     console.error ('Error sending email:', error.message);
   }
 }
+
 const forgotPassword = async (req, res) => {
   try {
     const {email: to} = req.body;
