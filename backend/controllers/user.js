@@ -69,8 +69,8 @@ const signup = async (req, res) => {
     res.status (500).json ({success: false, error: 'Internal Server Error'});
   }
 };
-//m-post =>password/forgot-password
 
+// general function to send email via Sendinblue
 async function sendEmail({
   message = 'forgot password message',
   subject = 'recover password',
@@ -102,7 +102,7 @@ async function sendEmail({
     console.error ('Error sending email:', error.message);
   }
 }
-
+//m-post=>password/forgot-password
 const forgotPassword = async (req, res) => {
   try {
     const {email: to} = req.body;
