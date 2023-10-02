@@ -7,7 +7,7 @@ const cookieParser = require ('cookie-parser');
 
 // files import
 const sequelize = require ('./db/connection');
-const signupRouter = require ('./routes/signup');
+const userRouter = require ('./routes/user');
 const loginRouter = require ('./routes/login');
 const expenseRouter = require ('./routes/expense');
 const verifyRouter = require ('./routes/verify');
@@ -26,7 +26,7 @@ const corsOptions = {
 app.use (cors (corsOptions));
 app.use (express.json ());
 app.use (cookieParser ());
-app.use (signupRouter);
+app.use (userRouter);
 app.use (loginRouter);
 app.use (expenseRouter);
 app.use (verifyRouter);

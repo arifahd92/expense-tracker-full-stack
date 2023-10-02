@@ -1,3 +1,5 @@
+const axios = require ('axios');
+//var SibApiV3Sdk = require('sib-api-v3-sdk');
 const bcrypt = require ('bcrypt');
 const User = require ('../models/user');
 const jwt = require ('jsonwebtoken');
@@ -67,5 +69,56 @@ const signup = async (req, res) => {
     res.status (500).json ({success: false, error: 'Internal Server Error'});
   }
 };
+//m-post =>password/forgot-password
 
-module.exports = {signup};
+async function sendEmail({
+  message = 'forgot password message',
+  subject = 'recover password',
+  to = 'random@gmail.com',
+}) {
+  try {
+    const apiUrl = 'https://api.sendinblue.com/v3/smtp/email';
+
+    const emailData = {
+      sender: {name: 'md arif', email: 'arifahd92@gmail.com'},
+      to: [{email: to}],
+      subject,
+      textContent: message,
+    };
+
+    const response = await axios.post (apiUrl, emailData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': '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',
+      },
+    });
+
+    if (response.status === 201) {
+      console.log ('Email sent successfully');
+    } else {
+      console.error ('Failed to send email:', response.data);
+    }
+  } catch (error) {
+    console.error ('Error sending email:', error.message);
+  }
+}
+const forgotPassword = async (req, res) => {
+  try {
+    const {email: to} = req.body;
+    const user = await User.findOne ({where: {email: to}});
+    if (user) {
+      sendEmail ({
+        to,
+        message: 'it will be field',
+        subject: 'it will also be field',
+      });
+    }
+    if (!user) {
+      return res.json ({message: 'you are not a registered user'});
+    }
+    res.send ({message: 'chec your email'});
+  } catch (error) {
+    res.json ({message: 'you are not a registered user from catch'});
+  }
+};
+module.exports = {signup, forgotPassword};
