@@ -32,10 +32,12 @@ const updatePassword = async (req, res) => {
         if (usercount != 0 && passwordcount != 0) {
           return res.send ({message: 'success'});
         }
+        console.log ('returning failed');
         return res.send ({message: 'failed'});
       });
+    } else {
+      return res.send ({message: 'link expired'});
     }
-    return res.send ({message: 'link expired'});
   } catch (error) {
     console.log (error);
     res.send ({message: 'internal server error'});

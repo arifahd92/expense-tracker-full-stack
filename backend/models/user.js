@@ -13,11 +13,29 @@ const User = sequelize.define ('user', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  totalMovieExpense: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  totalShoppingExpense: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  totalRentExpense: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
+  totalGrocceryExpense: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+  },
   totalExpenseAmount: {
     type: Sequelize.INTEGER,
+    defaultValue: 0,
   },
   premium: {
     type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 module.exports = User;

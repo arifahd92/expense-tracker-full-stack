@@ -9,19 +9,44 @@ const addExpense = async (req, res) => {
   try {
     // const {userId} = req.params;
     const userId = req.userId;
+    const {amount, category} = req.body;
     const input = req.body;
-    const {amount} = req.body;
+    const prevTotal = req.user.totalExpenseAmount;
+    const currentTotal = +prevTotal + +amount;
+    if (category == 'Movie') {
+      const prevAmount = req.user.totalMovieExpense;
+      const total = prevAmount + +amount;
+      await req.user.update (
+        {totalMovieExpense: total, totalExpenseAmount: currentTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Shopping') {
+      const prevAmount = req.user.totalShoppingExpense;
+      const total = prevAmount + +amount;
+      await req.user.update (
+        {totalShoppingExpense: total, totalExpenseAmount: currentTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Groccery') {
+      const prevAmount = req.user.totalGrocceryExpense;
+      const total = prevAmount + +amount;
+      await req.user.update (
+        {totalGrocceryExpense: total, totalExpenseAmount: currentTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Rent') {
+      const prevAmount = req.user.totalRentExpense;
+      const total = prevAmount + +amount;
+      await req.user.update (
+        {totalRentExpense: total, totalExpenseAmount: currentTotal},
+        {transaction: t}
+      );
+    }
     const createdData = await Expense.create (
       {...input, userId},
       {transaction: t}
     );
     console.log ('added');
-    const prevTotal = req.user.totalExpenseAmount;
-    const currentTotal = +prevTotal + +amount;
-    await req.user.update (
-      {totalExpenseAmount: currentTotal},
-      {transaction: t}
-    );
     await t.commit ();
     res.send (createdData);
   } catch (error) {
@@ -61,15 +86,51 @@ const deleteExpense = async (req, res) => {
   try {
     const {expenseId} = req.params;
     const expense = await Expense.findOne ({where: {id: expenseId}});
+    //console.log ('i m req.user', req.user);
+    const prevTotal = req.user.totalExpenseAmount;
+    const amount = expense.amount; // that is being deleted
+    const totalAmount = +prevTotal - +amount;
+    const category = expense.category;
+    console.log (
+      '**************************************************************************************************'
+    );
+    console.log ({category});
+    if (category == 'Movie') {
+      const prevAmount = req.user.totalMovieExpense;
+      const total = prevAmount - expense.amount;
+      await req.user.update (
+        {totalMovieExpense: total, totalExpenseAmount: totalAmount},
+        {transaction: t}
+      );
+    } else if (category == 'Shopping') {
+      console.log ('delete shopping');
+      const prevAmount = req.user.totalShoppingExpense;
+      const total = prevAmount - expense.amount;
+      console.log ({total});
+      await req.user.update (
+        {totalShoppingExpense: total, totalExpenseAmount: totalAmount},
+        {transaction: t}
+      );
+    } else if (category == 'Groccery') {
+      const prevAmount = req.user.totalGrocceryExpense;
+      const total = prevAmount - expense.amount;
+      await req.user.update (
+        {totalGrocceryExpense: total, totalExpenseAmount: totalAmount},
+        {transaction: t}
+      );
+    } else if (category == 'Rent') {
+      const prevAmount = req.user.totalRentExpense;
+      const total = prevAmount - expense.amount;
+      await req.user.update (
+        {totalRentExpense: total, totalExpenseAmount: totalAmount},
+        {transaction: t}
+      );
+    }
     const deletedData = await Expense.destroy (
       {where: {id: expenseId}},
       {transaction: t}
     );
-    const prevTotal = req.user.totalExpenseAmount;
-    const amount = expense.amount;
-    const totalAmount = +prevTotal - +amount;
-    await req.user.update ({totalExpenseAmount: totalAmount}, {transaction: t});
-    console.log (deletedData);
+    //console.log (deletedData);
     await t.commit ();
     res.send ({message: 'success'});
   } catch (error) {
@@ -89,12 +150,46 @@ const updateExpense = async (req, res) => {
     const {amount: newAmount} = req.body; //7
     const expense = await Expense.findByPk (expenseId);
     const prevAmount = expense.amount; //say 5
-    const difference = +newAmount - prevAmount;
+    const difference = +newAmount - prevAmount; //it will be used in category total
+
     const updatedTotal = req.user.totalExpenseAmount + +difference;
-    await req.user.update (
-      {totalExpenseAmount: updatedTotal},
-      {transaction: t}
+    const category = expense.category;
+    console.log (
+      '**************************************************************************************************'
     );
+    console.log ({category});
+    if (category == 'Movie') {
+      const prevAmount = req.user.totalMovieExpense;
+      const total = prevAmount + +difference;
+      await req.user.update (
+        {totalMovieExpense: total, totalExpenseAmount: updatedTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Shopping') {
+      console.log ('update shopping');
+      const prevAmount = req.user.totalShoppingExpense;
+      const total = prevAmount + +difference;
+      console.log ({total});
+      await req.user.update (
+        {totalShoppingExpense: total, totalExpenseAmount: updatedTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Groccery') {
+      const prevAmount = req.user.totalGrocceryExpense;
+      const total = prevAmount + +difference;
+      await req.user.update (
+        {totalGrocceryExpense: total, totalExpenseAmount: updatedTotal},
+        {transaction: t}
+      );
+    } else if (category == 'Rent') {
+      const prevAmount = req.user.totalRentExpense;
+      const total = prevAmount + +difference;
+      await req.user.update (
+        {totalRentExpense: total, totalExpenseAmount: updatedTotal},
+        {transaction: t}
+      );
+    }
+
     console.log (updatedData);
     const [count] = await Expense.update (
       updatedData,
