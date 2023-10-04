@@ -11,6 +11,7 @@ import {
 } from "../../store/slices/expense";
 import Leaderboard from "./Leaderboard";
 import Header from "./Header";
+import ReportCard from "./ReportCard";
 
 export default function Expense() {
   const [editIndex, setEditIndex] = useState(-1);
@@ -19,7 +20,7 @@ export default function Expense() {
 
   const [input, setInput] = useState({
     amount: "",
-    catagory: "",
+    category: "",
     description: "",
   });
   const [showInput, setShowInput] = useState(false);
@@ -29,7 +30,9 @@ export default function Expense() {
   const { expense, isLoading, unAuthorize, total } = useSelector(
     (state) => state.expense
   );
-  const { boardFlag, darkFlag } = useSelector((state) => state.user);
+  const { boardFlag, darkFlag, reportFlag } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
   let userToken = localStorage.getItem("userToken");
   useEffect(() => {
@@ -70,7 +73,7 @@ export default function Expense() {
     );
     setInput({
       amount: "",
-      catagory: "",
+      category: "",
       description: "",
     });
     setExpenseId(-1);
@@ -111,11 +114,13 @@ export default function Expense() {
     localStorage.removeItem("userToken");
     navigate("/");
   }
+  const style = { paddingLeft: "5px" };
 
   return (
     <>
       <Header />
       {boardFlag && <Leaderboard />}
+      {reportFlag && <ReportCard />}
       <div className="container mt-1 w-sm-75  ">
         <div className="row d-flex justify-content-end ">
           <div className="col-4 ">
@@ -176,9 +181,9 @@ export default function Expense() {
               <select
                 required
                 className="form-select"
-                id="catagory"
+                id="category"
                 onChange={handleinputchange}
-                value={input.catagory}
+                value={input.category}
               >
                 <option disabled value="">
                   Select an option
@@ -201,29 +206,7 @@ export default function Expense() {
         </div>
       )}
       <hr />
-      <div className=" container  container-sm-fluid mt-5 border  ">
-        <div className="row ">
-          <div className="col-1">
-            <h6>#</h6>
-          </div>
-          <div className="col-2 ">
-            <h6>Expense</h6>
-          </div>
-          <div className="col-2  text-center ">
-            <h6>Catagory</h6>
-          </div>
-          <div className="col-3">
-            <h6>Description</h6>
-          </div>
-          <div className="col-2  ">
-            <h6>edit</h6>
-          </div>
-          <div className="col-2 text-center float-end">
-            <h6 className="float-end">delete</h6>
-          </div>
-        </div>
-        <div className="row  border border-dark"></div>
-      </div>
+
       {expense.length === 0 && (
         <div
           className={`container text-black pt-5  ${
@@ -239,50 +222,79 @@ export default function Expense() {
       )}
       {isLoading && <LoadingSpinner />}
       {expense.length > 0 && (
-        <div
-          className={`container  bg-body-secondary ${
-            darkFlag && "bg-black text-white"
-          } `}
-          style={{ minHeight: "50vh" }}
-        >
-          {console.log("updated")}
-          {expense.map((item, ind) => {
-            return (
-              <div className="row text-black  " key={ind}>
-                <div className="col-1">{ind + 1}</div>
-                <div className="col-2  ">{item.amount}$</div>
-                <div className="col-2  text-center">{item.catagory}</div>
-                <div
-                  className="col-3  d-flex flex-wrap "
-                  style={{ overflowX: "auto" }}
-                >
-                  {item.description}
-                </div>
-                <div className="col-2  ">
-                  <button
-                    className="btn  btn-warning"
-                    onClick={() => handleEdit(ind, item.id)}
-                  >
-                    {" "}
-                    edit
-                  </button>
-                </div>
-                <div className="col-2  text-center ">
-                  <button
-                    onClick={() => handleDelete(ind, item.id)}
-                    className="btn bg-danger float-end "
-                  >
-                    delete
-                  </button>
-                </div>
-                <hr />
-              </div>
-            );
-          })}
+        <div className=" container  container-sm-fluid mt-5 border table-responsive bg-gradient text-white   ">
+          <table className="table table-bordered bg-gradient table-striped  ">
+            <tr className="p-2 ">
+              <th>
+                <div className="pt-2 pb-2 text-center">#</div>
+              </th>
+              <th>
+                <div className="pt-2 pb-2 text-center">Expense</div>
+              </th>
+              <th>
+                <div className="pt-2 pb-2 text-center">Catagory</div>
+              </th>
+              <th>
+                <div className="pt-2 pb-2 text-center">Description</div>
+              </th>
+              <th>
+                <div className="pt-2 pb-2 text-center">edit</div>
+              </th>
+              <th>
+                <div className="pt-2 pb-2 text-center">delete</div>
+              </th>
+            </tr>
+
+            {expense.length > 0 &&
+              expense.map((item, ind) => {
+                return (
+                  <tr>
+                    <td>
+                      <div className="text-center pt-3 pb-2  ">{ind + 1})</div>
+                    </td>
+                    <td>
+                      <div className="text-center pt-3 pb-2">
+                        {item.amount}$
+                      </div>
+                    </td>
+                    <td>
+                      <div className="text-center pt-3 pb-2 w-100 ">
+                        {item.category}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="text-center pt-3 pb-2">
+                        {item.description}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="text-center pt-2 pb-1">
+                        <button
+                          className="btn  bg-warning "
+                          onClick={() => handleEdit(ind, item.id)}
+                        >
+                          edit
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="text-center pt-2 pb-1 ">
+                        <button
+                          onClick={() => handleDelete(ind, item.id)}
+                          className="btn bg-danger "
+                        >
+                          delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+          </table>
         </div>
       )}
       {expense.length > 0 && (
-        <div className="container">
+        <div className="container ">
           <div className="row bg-info p-2">
             <div className="col float-start text-white">Total Of Expense</div>
             <div className="col   d-flex justify-content-end text-white ">

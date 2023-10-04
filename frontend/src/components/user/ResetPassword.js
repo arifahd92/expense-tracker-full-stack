@@ -9,8 +9,10 @@ export default function ResetPassword() {
   const [cnfPassword, setCnfPassword] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== cnfPassword) {
-      alert("confirm password did not match with password");
+    try {
+        
+        if (password !== cnfPassword) {
+            alert("confirm password did not match with password");
       return;
     }
     const response = await axios.post(
@@ -20,6 +22,9 @@ export default function ResetPassword() {
     console.log(response.data);
     alert(response.data.message);
     navigate("/");
+        } catch (error) {
+            
+        }
   };
   return (
     <div>

@@ -7,6 +7,7 @@ import {
   toggleBoardFlag,
   clearUserState,
   darkFlagHandel,
+  toggleReportFlag,
 } from "../../store/slices/header";
 import { clearExpenseState } from "../../store/slices/expense";
 export default function Header() {
@@ -15,14 +16,14 @@ export default function Header() {
   const [nightMode, setNightMode] = useState(false);
   const userEmail = localStorage.getItem("userEmail");
   const userToken = localStorage.getItem("userToken");
-  const { boardFlag, darkFlag } = useSelector((state) => state.user);
+  const { boardFlag, darkFlag, reportFlag } = useSelector(
+    (state) => state.user
+  );
   const { premium } = useSelector((state) => state.expense);
   console.log({ boardFlag });
   const handleLogout = () => {
     const confirm = window.confirm("Are you sure");
     if (confirm) {
-      dispatch(clearExpenseState());
-      dispatch(clearUserState());
       localStorage.removeItem("userToken");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userId");
@@ -120,6 +121,13 @@ export default function Header() {
     }
     dispatch(toggleBoardFlag());
   };
+  const handleReportCard = () => {
+    if (!premium) {
+      alert("only for premium user's");
+      return;
+    }
+    dispatch(toggleReportFlag());
+  };
   const handleNightmode = (e) => {
     console.log(e.target.checked);
 
@@ -181,7 +189,15 @@ export default function Header() {
               className=" btn btn-outline-primary float-end mt-1   "
               onClick={handleLeaderboard}
             >
-              {boardFlag ? "hide" : "Leader board"}
+              {boardFlag ? "Hide" : "Leader board"}
+            </button>
+          </div>
+          <div className="col">
+            <button
+              className=" btn btn-outline-primary float-end mt-1   "
+              onClick={handleReportCard}
+            >
+              {reportFlag ? "Hide" : "Reprt card"}
             </button>
           </div>
         </div>

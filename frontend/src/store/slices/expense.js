@@ -30,6 +30,7 @@ export const fetchExpenses = createAsyncThunk(
       return { data, total, premium: premium };
     } catch (error) {
       // Handle the error response here
+      console.log("");
       console.log("Error fetching expenses:", error.response.data);
 
       if (error.response.data.verification === false) {
@@ -107,7 +108,7 @@ export const addUpdate = createAsyncThunk(
       if (editFlag) {
         return { editFlag: true, editIndex, data: input, error: false };
       } else {
-        return { editFlag: false, data: input, error: false };
+        return { editFlag: false, data: response.data, error: false };
       }
     } catch (error) {
       alert(error.message);
