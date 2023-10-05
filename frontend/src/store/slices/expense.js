@@ -167,10 +167,11 @@ const expenseSlice = createSlice({
         );
         // state.expense = newList;
         return {
-          ...action,
+          ...state,
           expense: newList,
           unAuthorize: false,
           total: total,
+          isLoading: false,
         };
       }
       // state.isLoading = false;

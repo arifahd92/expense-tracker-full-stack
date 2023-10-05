@@ -1,7 +1,7 @@
 import axios from "axios";
 //import Razorpay from "razorpay";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -96,6 +96,7 @@ export default function Expense() {
 
   //delete expense
   const handleDelete = (index, id) => {
+    const userToken = localStorage.getItem("userToken");
     console.log("i got clicked");
     console.log({ id, index });
     // try {
@@ -114,26 +115,13 @@ export default function Expense() {
     localStorage.removeItem("userToken");
     navigate("/");
   }
-  const style = { paddingLeft: "5px" };
 
   return (
     <>
       <Header />
       {boardFlag && <Leaderboard />}
       {reportFlag && <ReportCard />}
-      <div className="container mt-1 w-sm-75  ">
-        <div className="row d-flex justify-content-end ">
-          <div className="col-4 ">
-            <button
-              type="button "
-              className="btn btn-secondary float-end "
-              onClick={() => setShowInput(!showInput)}
-            >
-              {!showInput ? "+Add Expense" : "Close"}
-            </button>
-          </div>
-        </div>
-      </div>
+
       {showInput && (
         <div
           className={`container  mt-5  w-75  border-1 d-flex justify-content-center bg-body-secondary ${
@@ -205,6 +193,19 @@ export default function Expense() {
           </form>
         </div>
       )}
+      <div className="container mt-1 w-sm-75  ">
+        <div className="row d-flex justify-content-end ">
+          <div className="col-4 ">
+            <button
+              type="button "
+              className="btn btn-secondary float-end "
+              onClick={() => setShowInput(!showInput)}
+            >
+              {!showInput ? "+Add Expense" : "Close"}
+            </button>
+          </div>
+        </div>
+      </div>
       <hr />
 
       {expense.length === 0 && (
@@ -248,7 +249,7 @@ export default function Expense() {
             {expense.length > 0 &&
               expense.map((item, ind) => {
                 return (
-                  <tr>
+                  <tr key={item.id}>
                     <td>
                       <div className="text-center pt-3 pb-2  ">{ind + 1})</div>
                     </td>

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useSelector} from 'react-redux';
-export default function Leaderboard () {
-  const userToken = localStorage.getItem ('userToken');
-  const [users, setUsers] = useState ([]);
-  const {darkFlag} = useSelector (state => state.user);
-  useEffect (() => {
-    const userToken = localStorage.getItem ('userToken');
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+export default function Leaderboard() {
+  const userToken = localStorage.getItem("userToken");
+  const [users, setUsers] = useState([]);
+  const { darkFlag } = useSelector((state) => state.user);
+  useEffect(() => {
+    const userToken = localStorage.getItem("userToken");
     const fetchUser = async () => {
       try {
-        const response = await axios.get (
-          'http://localhost:4000/premium/leader-board',
+        const response = await axios.get(
+          "http://localhost:4000/premium/leader-board",
           {
             headers: {
               Authorization: userToken,
@@ -18,12 +18,12 @@ export default function Leaderboard () {
           }
         );
         const users = response.data;
-        console.log ('from leaderboard');
+        console.log("from leaderboard");
         //getting sorted and grouped data
-        console.log (users);
-        setUsers (users);
+        console.log(users);
+        setUsers(users);
         /*
-        //with bad query***********
+        //with bad query at backend***********
         const totalAmountArr = [];
         users.forEach (element => {
           let sum = 0;
@@ -45,23 +45,29 @@ export default function Leaderboard () {
         setUsers (updatedUser);
         */
       } catch (error) {
-        console.log (error.response);
+        console.log(error.response);
       }
     };
-    fetchUser ();
+    fetchUser();
   }, []);
   return (
     <div
-      className={`leaderboardContainer border bg-info ${darkFlag && 'bg-black text-info'} `}
+      className={`leaderboardContainer border  ${
+        darkFlag && "bg-black text-info"
+      } `}
       style={{
-        position: 'absolute',
-        minHeight: '80vh',
-        width: '100vw',
-        top: '170px',
+        position: "absolute",
+        minHeight: "80vh",
+        width: "100vw",
+        top: "100px",
         zIndex: 5,
+        backgroundColor: "GrayText",
       }}
     >
-      <div className={`container ${darkFlag && 'bg-black text-black'} mt-4`}>
+      <div
+        className={`container ${darkFlag && "bg-black text-black"} mt-4`}
+        style={{ minHeight: "calc(100vh - 100px)" }}
+      >
         <div className="row  border-bottom-5 ">
           <h4 className=" d-flex justify-content-center bg-info bg-secondary-subtle p-2 ">
             LEADER BOARD
@@ -80,11 +86,13 @@ export default function Leaderboard () {
         </div>
 
         {users.length > 0 &&
-          users.map ((user, ind) => {
+          users.map((user, ind) => {
             return (
               <div
                 key={user.id}
-                className={`row bg-body-tertiary border mb-2 p-2 ${ind <= 2 && 'text-info'}`}
+                className={`row bg-body-tertiary border mb-2 p-2 ${
+                  ind <= 2 && "text-info"
+                }`}
               >
                 <div className="col  "># {ind + 1}</div>
                 <div className="col d-flex justify-content-center ">
