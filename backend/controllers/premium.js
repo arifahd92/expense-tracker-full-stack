@@ -97,9 +97,7 @@ const reportCard = async (req, res) => {
         arr.push ({[expenses[ind - 1].category]: categoryArr[i++]});
       }
     });
-    res.json ({
-      expenses: arr,
-    });
+    res.send (arr);
   } catch (error) {
     console.error (error);
     res.status (500).json ({message: 'Internal server error'});
