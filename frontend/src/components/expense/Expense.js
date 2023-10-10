@@ -271,6 +271,7 @@ export default function Expense() {
                     <td>
                       <div className="text-center pt-2 pb-1">
                         <button
+                          disabled={isLoading}
                           className="btn  bg-warning "
                           onClick={() => handleEdit(ind, item.id)}
                         >
@@ -281,6 +282,7 @@ export default function Expense() {
                     <td>
                       <div className="text-center pt-2 pb-1 ">
                         <button
+                          disabled={isLoading || editFlag}
                           onClick={() => handleDelete(ind, item.id)}
                           className="btn bg-danger "
                         >

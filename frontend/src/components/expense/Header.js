@@ -122,10 +122,6 @@ export default function Header() {
     dispatch(toggleBoardFlag());
   };
   const handleReportCard = () => {
-    if (!premium) {
-      alert("only for premium user's");
-      return;
-    }
     dispatch(toggleReportFlag());
   };
   const handleNightmode = (e) => {

@@ -1,6 +1,7 @@
 const {ForgotPassword} = require ('../models/password');
 const User = require ('../models/user');
 const sendinBlueApiKey = process.env.API_KEY;
+
 const axios = require ('axios');
 const saltRounds = 10;
 const bcrypt = require ('bcrypt');
@@ -69,7 +70,7 @@ async function sendEmail({message, subject, to}) {
       console.error ('Failed to send email:', response.data);
     }
   } catch (error) {
-    console.error ('Error sending email:', error.message);
+    console.error ('Error sending email:', error);
   }
 }
 
@@ -91,12 +92,12 @@ const forgotPassword = async (req, res) => {
       console.log (
         `http://localhost:3000/password/reset-password/${requestId}`
       );
-      /*  sendEmail ({
+      sendEmail ({
         to,
         message: `http://localhost:3000/password/reset-password/${requestId}`,
         subject: 'ressetting password',
       });
-      */
+      console.log (sendinBlueApiKey);
     }
     if (!user) {
       return res.json ({message: 'you are not a registered user'});
