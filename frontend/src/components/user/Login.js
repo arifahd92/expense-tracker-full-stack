@@ -62,67 +62,68 @@ function Login() {
 
   return (
     <div className={darkFlag && "bg-black text-white"}>
-      <div className="container mt-3 d-flex justify-content-center">
-        <h3 className="text-secondary">login</h3>
+      <div className="container mt-5 d-flex justify-content-center">
+        <h2 className="text-secondary">Login</h2>
       </div>
-      <div className="container mt-5  ">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              required
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <div className="input-group">
-              <input
-                required
-                type={showPassword ? "text" : "password"}
-                className="form-control"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-              />
-              <div className="input-group-append border">
-                <button
-                  className="btn btn-outline-none"
-                  type="button"
-                  onClick={handleTogglePassword}
-                >
-                  {showPassword ? <EyeSlashFill /> : <EyeFill />}
-                </button>
+      <div className="container mt-3  ">
+        <div className="row">
+          <div className="col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-secondary">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">Email:</label>
+                <input
+                  required
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
               </div>
-            </div>
-          </div>
-          <div className="d-flex justify-content-around text-primary">
-            <div
-              className="signup  border-bottom  cursor-pointer"
-              onClick={() => navigate("/register")}
-            >
-              Not registered yet? Register
-            </div>
-            <div
-              className="signup  border-bottom  cursor-pointer"
-              onClick={() => navigate("/password/forgot")}
-            >
-              Forgot password? Reset
-            </div>
-          </div>
+              <div className="form-group">
+                <label htmlFor="password">Password:</label>
+                <div className="input-group">
+                  <input
+                    required
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                  />
+                  <div className="input-group-append border bg-white">
+                    <button
+                      className="btn btn-outline-none"
+                      type="button"
+                      onClick={handleTogglePassword}>
+                      {showPassword ? <EyeSlashFill /> : <EyeFill />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex  justify-content-between text-primary">
+                <div
+                  className="signup  border-bottom  cursor-pointer"
+                  onClick={() => navigate("/register")}>
+                  Not registered yet? Register
+                </div>
+                <div
+                  className="signup  border-bottom  cursor-pointer"
+                  onClick={() => navigate("/password/forgot")}>
+                  Forgot password? Reset
+                </div>
+              </div>
 
-          <button type="submit" className="btn btn-primary mt-4 w-100 ">
-            submit
-          </button>
-        </form>
+              <button type="submit" className="btn btn-primary mt-4 w-100 ">
+                submit
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
