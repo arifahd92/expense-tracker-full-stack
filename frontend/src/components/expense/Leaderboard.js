@@ -62,12 +62,10 @@ export default function Leaderboard() {
         top: "100px",
         zIndex: 5,
         backgroundColor: "GrayText",
-      }}
-    >
+      }}>
       <div
         className={`container ${darkFlag && "bg-black text-black"} mt-4`}
-        style={{ minHeight: "calc(100vh - 100px)" }}
-      >
+        style={{ minHeight: "calc(100vh - 100px)" }}>
         <div className="row  border-bottom-5 ">
           <h4 className=" d-flex justify-content-center bg-info bg-secondary-subtle p-2 ">
             LEADER BOARD
@@ -92,8 +90,7 @@ export default function Leaderboard() {
                 key={user.id}
                 className={`row bg-body-tertiary border mb-2 p-2 ${
                   ind <= 2 && "text-info"
-                }`}
-              >
+                }`}>
                 <div className="col  "># {ind + 1}</div>
                 <div className="col d-flex justify-content-center ">
                   {user.name}

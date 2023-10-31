@@ -67,7 +67,7 @@ function Login() {
       </div>
       <div className="container mt-3  ">
         <div className="row">
-          <div className="col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-secondary">
+          <div className="col-md-10 offset-md-1 col-lg-8  col-xl-6 offset-xl-3 offset-lg-2 text-secondary">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="email">Email:</label>
@@ -105,16 +105,16 @@ function Login() {
                   </div>
                 </div>
               </div>
-              <div className="d-flex  justify-content-between text-primary">
+              <div className="d-flex  justify-content-around text-primary">
                 <div
                   className="signup  border-bottom  cursor-pointer"
                   onClick={() => navigate("/register")}>
-                  Not registered yet? Register
+                  Not registered yet?
                 </div>
                 <div
                   className="signup  border-bottom  cursor-pointer"
                   onClick={() => navigate("/password/forgot")}>
-                  Forgot password? Reset
+                  Forgot password?
                 </div>
               </div>
 

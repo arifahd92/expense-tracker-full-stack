@@ -99,7 +99,7 @@ export default function Header() {
         alert(result.data.message);
       },
       prefill: {
-        name: "md arif",
+        name: " arif",
         email: "arifahd92@gmail.com",
         contact: "7275890926",
       },
@@ -137,39 +137,39 @@ export default function Header() {
   console.log({ darkFlag: darkFlag });
   return (
     <div className={darkFlag && "bg-black text-white"}>
-      <div className={`container   container-sm mt-1 w-sm-75 `}>
-        <div className="row   ">
-          <div className="col text-warning  ">{userEmail}</div>
+      <div className={`container mt-1 `}>
+        <div className="row    ">
+          <div className="col text-warning border border-danger">
+            {userEmail}
+          </div>
 
-          <div className="col">
+          <div className="col text-md-center">
             <button
-              className="btn btn-warning  float-end mb-1"
-              onClick={handleLogout}
-            >
+              className="btn btn-warning   float-lg-end mb-1"
+              onClick={handleLogout}>
               logout
             </button>
           </div>
         </div>
 
         <div className="row">
-          {!premium && (
-            <div className="col  ">
+          {!premium ? (
+            <div className="col-6 col-lg-3 border border-danger  ">
               <button
-                className=" btn btn-outline-primary   "
-                onClick={buyPremium}
-              >
+                className=" btn btn-outline-warning   "
+                onClick={buyPremium}>
                 buy premium
               </button>
             </div>
-          )}
-          {premium && (
-            <div className="col ">
-              <span className="text-bg-success  text-center p-2 ">
+          ) : (
+            <div className="col-6 col-lg-3 border border-danger  ">
+              <span className="text-bg-success  text-center ">
                 Premium user
               </span>
             </div>
           )}
-          <div className="col d-flex justify-content-center  ">
+
+          <div className="col-6 col-lg-3 border border-danger  d-flex justify-content-center text-secondary ">
             <span>dark mode</span>
             <label className="switch mt-1 ">
               <input
@@ -180,25 +180,23 @@ export default function Header() {
               <span className="slider round"></span>
             </label>
           </div>
-          <div className="col">
+          <div className="col-6 col-lg-3 border border-danger text-center ">
             <button
-              className=" btn btn-outline-primary float-end mt-1   "
-              onClick={handleLeaderboard}
-            >
+              className=" btn btn-outline-warning  mt-1   "
+              onClick={handleLeaderboard}>
               {boardFlag ? "Hide" : "Leader board"}
             </button>
           </div>
-          <div className="col">
+          <div className="col-6 col-lg-3 border border-danger text-center">
             <button
-              className=" btn btn-outline-primary float-end mt-1   "
-              onClick={handleReportCard}
-            >
+              className=" btn btn-outline-warning float-lg-end mt-1   "
+              onClick={handleReportCard}>
               {reportFlag ? "Hide" : "Reprt card"}
             </button>
           </div>
         </div>
       </div>
-      <hr />
+      <hr className="text-warning" />
     </div>
   );
 }

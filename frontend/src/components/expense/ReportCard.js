@@ -65,18 +65,16 @@ export default function ReportCard() {
         position: "absolute",
         minHeight: "80vh",
         width: "100vw",
-        top: "100px",
+        top: "170px",
         zIndex: 5,
         backgroundColor: "GrayText",
-      }}
-    >
+      }}>
       {report.length >= 4 && (
         <div
           class="container bg-body-secondary table-responsive border border-danger  "
           style={{
             minHeight: "calc(100vh - 100px)",
-          }}
-        >
+          }}>
           <div className="container">
             <div className="row">
               <div className=" col m-4 text-primary">
@@ -91,8 +89,7 @@ export default function ReportCard() {
                 <div>
                   <button
                     className="btn btn-outline-primary "
-                    onClick={downloadReport}
-                  >
+                    onClick={downloadReport}>
                     download
                   </button>
                 </div>

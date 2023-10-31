@@ -61,7 +61,7 @@ function Signup() {
       </div>
       <div className="container mt-3  ">
         <div className="row">
-          <div className="col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-secondary">
+          <div className="col-md-10 offset-md-1 col-lg-8  col-xl-6 offset-xl-3 offset-lg-2 text-secondary">
             <form onSubmit={handleSubmit} className="">
               <div className="form-group">
                 <label htmlFor="name">Name:</label>

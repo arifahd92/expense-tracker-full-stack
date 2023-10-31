@@ -25,34 +25,36 @@ export default function ForgotPassword() {
   };
   return (
     <div className="container mt-5">
-      <div className="row ">
+      <div className="row">
         <div className="col text-center text-secondary">
           <h2>Password Recovery Page</h2>
         </div>
       </div>
       <div className="row">
-        <div className="col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-secondary">
-          <div className="">
+        <div className="col-md-10 offset-md-1 col-lg-8 col-xl-6 offset-xl-3 offset-lg-2 text-secondary">
+          <div>
             <form onSubmit={handleSubmit} className="pt-3">
               <div className="row">
                 <div className="col">
                   <label htmlFor="email">Email:</label>
-                  <input
-                    required
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                  />
+                  <div className="input-group">
+                    <input
+                      required
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="d-flex justify-content-center ">
+              <div className="d-flex justify-content-center">
                 <div
-                  className="signup  cursor-pointer text-primary"
+                  className="signup cursor-pointer text-primary"
                   onClick={() => navigate("/register")}>
                   Not registered yet? Register
                 </div>

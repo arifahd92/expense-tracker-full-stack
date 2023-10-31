@@ -124,73 +124,72 @@ export default function Expense() {
 
       {showInput && (
         <div
-          className={`container  mt-5  w-75  border-1 d-flex justify-content-center bg-body-secondary ${
+          className={`container  mt-5   d-flex justify-content-center  ${
             darkFlag && "bg-black "
-          }`}
-        >
-          <form
-            className={`mt-4 row ${darkFlag && "bg-black"}`}
-            style={{ width: "80%" }}
-            onSubmit={submitHandeler}
-          >
-            <div className="mb-3 ">
-              <label htmlFor="amount" className="form-label">
-                amount:
-              </label>
-              <input
-                required
-                type="number"
-                className="form-control"
-                id="amount"
-                placeholder="Enter amount"
-                min={0}
-                value={input.amount}
-                onChange={handleinputchange}
-              />
+          }`}>
+          <div className="row">
+            <div className="col-md-10 offset-md-1 col-lg-8   offset-lg-2 text-secondary">
+              <form
+                className={`mt-4 row ${darkFlag && "bg-black"}`}
+                onSubmit={submitHandeler}>
+                <div className="mb-3 ">
+                  <label htmlFor="amount" className="form-label">
+                    amount:
+                  </label>
+                  <input
+                    required
+                    type="number"
+                    className="form-control"
+                    id="amount"
+                    placeholder="Enter amount"
+                    min={0}
+                    value={input.amount}
+                    onChange={handleinputchange}
+                  />
+                </div>
+                <div className="mb-3 ">
+                  <label htmlFor="description" className="form-label">
+                    description:
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    className="form-control"
+                    id="description"
+                    placeholder="Enter description"
+                    value={input.description}
+                    onChange={handleinputchange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="exampleSelect" className="form-label">
+                    Select an option:
+                  </label>
+                  <select
+                    required
+                    className="form-select"
+                    id="category"
+                    onChange={handleinputchange}
+                    value={input.category}>
+                    <option disabled value="">
+                      Select an option
+                    </option>
+                    <option value="Movie">Movie</option>
+                    <option value="Shopping">Shopping </option>
+                    <option value="Rent">Rent</option>
+                    <option value="Groccery">Groccery</option>
+                  </select>
+                </div>
+                <div className="text-center mt-3 d-flex  justify-content-center ">
+                  <button
+                    type="submit"
+                    className="btn btn btn-primary d-block w-100 ">
+                    {editFlag ? "update" : "add"}
+                  </button>
+                </div>
+              </form>
             </div>
-            <div className="mb-3 ">
-              <label htmlFor="description" className="form-label">
-                description:
-              </label>
-              <input
-                required
-                type="text"
-                className="form-control"
-                id="description"
-                placeholder="Enter description"
-                value={input.description}
-                onChange={handleinputchange}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="exampleSelect" className="form-label">
-                Select an option:
-              </label>
-              <select
-                required
-                className="form-select"
-                id="category"
-                onChange={handleinputchange}
-                value={input.category}
-              >
-                <option disabled value="">
-                  Select an option
-                </option>
-                <option value="Movie">Movie</option>
-                <option value="Shopping">Shopping </option>
-                <option value="Rent">Rent</option>
-                <option value="Groccery">Groccery</option>
-              </select>
-            </div>
-            <div className="text-center d-flex  justify-content-center ">
-              <button
-                type="submit"
-                className="btn btn btn-primary d-block w-50 "
-              >
-                {editFlag ? "update" : "add"}
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       )}
       <div className="container mt-1 w-sm-75  ">
@@ -199,21 +198,19 @@ export default function Expense() {
             <button
               type="button "
               className="btn btn-secondary float-end "
-              onClick={() => setShowInput(!showInput)}
-            >
+              onClick={() => setShowInput(!showInput)}>
               {!showInput ? "+Add Expense" : "Close"}
             </button>
           </div>
         </div>
       </div>
-      <hr />
+      <hr className="text-warning" />
 
       {expense.length === 0 && (
         <div
           className={`container text-black pt-5  ${
             darkFlag && "bg-black text-white"
-          }`}
-        >
+          }`}>
           <div className="row  ">
             <div class="alert alert-warning text-bg-info text-center  ">
               no expense found, add some expense...
@@ -273,8 +270,7 @@ export default function Expense() {
                         <button
                           disabled={isLoading}
                           className="btn  bg-warning "
-                          onClick={() => handleEdit(ind, item.id)}
-                        >
+                          onClick={() => handleEdit(ind, item.id)}>
                           edit
                         </button>
                       </div>
@@ -284,8 +280,7 @@ export default function Expense() {
                         <button
                           disabled={isLoading || editFlag}
                           onClick={() => handleDelete(ind, item.id)}
-                          className="btn bg-danger "
-                        >
+                          className="btn bg-danger ">
                           delete
                         </button>
                       </div>
