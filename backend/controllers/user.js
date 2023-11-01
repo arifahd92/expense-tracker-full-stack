@@ -7,7 +7,7 @@ const jwt = require ('jsonwebtoken');
 const saltRounds = 10;
 
 const secretKey = process.env.JWT_TOKEN;
-const sendinBlueApiKey = process.env.API_KEY;
+//const sendinBlueApiKey = process.env.API_KEY;
 const generateToken = data => {
   try {
     console.log ({generateToken: data});

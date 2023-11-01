@@ -18,7 +18,7 @@ function sendEmail(to, subject, message) {
     if (err) {
       console.log(err.message);
     } else {
-      console.log(data);
+      console.log("email sent from email file");
     }
   });
 }

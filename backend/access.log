@@ -1,0 +1,6 @@
+::1 - - [01/Nov/2023:06:45:20 +0000] "OPTIONS /verify-user HTTP/1.1" 204 0 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [01/Nov/2023:06:45:21 +0000] "POST /verify-user HTTP/1.1" 200 48 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [01/Nov/2023:06:45:21 +0000] "OPTIONS /get-expense HTTP/1.1" 204 0 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [01/Nov/2023:06:45:21 +0000] "OPTIONS /get-expense HTTP/1.1" 204 0 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [01/Nov/2023:06:45:21 +0000] "GET /get-expense HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [01/Nov/2023:06:45:21 +0000] "GET /get-expense HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"

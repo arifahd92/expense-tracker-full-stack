@@ -1,10 +1,15 @@
 const dotenv = require("dotenv");
 dotenv.config();
+
+const fs = require("fs");
+const path = require("path");
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-
+const morgan = require("morgan");
+const compression = require("compression");
 // files import
 const sequelize = require("./db/connection");
 //routes
@@ -26,6 +31,15 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+); //here a is used to append
+
+// Use Morgan with the write stream
+app.use(morgan("combined", { stream: accessLogStream }));
+app.use(compression()); //compress file, loading faster, increase bandwidth
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());

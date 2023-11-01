@@ -45,9 +45,6 @@ const updatePassword = async (req, res) => {
     res.send({ message: "internal server error" });
   }
 };
-
-// general function to send email via Sendinblue
-
 //m-post=>password/forgot-password
 //send a link to user to reset password
 const forgotPassword = async (req, res) => {
@@ -69,11 +66,12 @@ const forgotPassword = async (req, res) => {
         "ressetting password",
         `http://localhost:3000/password/reset-password/${requestId}`
       );
-      console.log(sendinBlueApiKey);
+      //console.log(sendinBlueApiKey);
     }
     if (!user) {
       return res.json({ message: "you are not a registered user" });
     }
+    console.log("password recovery email sent");
     res.send({ message: "chec your email", requestId: requestId });
   } catch (error) {
     console.log(error.message);
