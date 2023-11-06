@@ -6,28 +6,32 @@ const initialState = {
   unAuthorize: false,
   premium: false,
   total: 0,
+  totalRecords: 0,
 };
 //const userToken = localStorage.getItem("userToken");
 // *******************fetching data action***************************************
 export const fetchExpenses = createAsyncThunk(
   "getExpense",
-  async (userToken) => {
+  async ({ userToken, page, rowsPerPage }) => {
     // console.log(userToken);
     try {
-      const response = await axios.get(`http://localhost:4000/get-expense`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: userToken,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:4000/get-expense?page=${page}&pageSize=${rowsPerPage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userToken,
+          },
+        }
+      );
       console.log("get data response inside fetch async");
-      const { data, total, premium } = response.data;
+      const { data, total, premium, totalRecords } = response.data;
       console.log(data);
       // const premium = response.data.premium;
       console.log({ premium: premium });
 
       console.log({ total });
-      return { data, total, premium: premium };
+      return { data, total, premium: premium, totalRecords };
     } catch (error) {
       // Handle the error response here
       console.log("");
@@ -48,6 +52,7 @@ export const deleteExpense = createAsyncThunk(
   async (payload) => {
     try {
       const expenseId = payload.id;
+      const totalRecords = payload.totalRecords;
       //setRequest(true);
       console.log(payload.id);
       console.log(payload.index);
@@ -65,7 +70,7 @@ export const deleteExpense = createAsyncThunk(
         return -1;
       }
       const data = await response.data;
-      return payload.index;
+      return { index: payload.index, totalRecords };
     } catch (error) {
       console.log(error.message);
       alert(error.message);
@@ -73,7 +78,7 @@ export const deleteExpense = createAsyncThunk(
         console.log("invalid token");
         throw error;
       } else {
-        return -1;
+        return { index: -1 };
       }
     }
   }
@@ -81,7 +86,14 @@ export const deleteExpense = createAsyncThunk(
 //*********adding/updating action***********************************************************
 export const addUpdate = createAsyncThunk(
   "addUpdate",
-  async ({ expenseId, editFlag, editIndex, input, userToken }) => {
+  async ({
+    expenseId,
+    editFlag,
+    editIndex,
+    input,
+    userToken,
+    totalRecords,
+  }) => {
     try {
       let response;
       let addURL = `http://localhost:4000/add-expense`;
@@ -108,7 +120,12 @@ export const addUpdate = createAsyncThunk(
       if (editFlag) {
         return { editFlag: true, editIndex, data: input, error: false };
       } else {
-        return { editFlag: false, data: response.data, error: false };
+        return {
+          editFlag: false,
+          data: response.data,
+          error: false,
+          totalRecords,
+        };
       }
     } catch (error) {
       alert(error.message);
@@ -143,6 +160,7 @@ const expenseSlice = createSlice({
       state.unAuthorize = false;
       state.total = action.payload.total;
       state.premium = action.payload.premium;
+      state.totalRecords = action.payload.totalRecords;
     },
     [fetchExpenses.pending]: (state, action) => {
       state.isLoading = true;
@@ -156,10 +174,10 @@ const expenseSlice = createSlice({
     //delete reducer
     [deleteExpense.fulfilled]: (state, action) => {
       console.log("action.payload", action.payload);
-      if (action.payload != -1) {
+      if (action.payload.index != -1) {
         // Create a new array without the deleted item using filter
         let newList = state.expense.filter(
-          (item, index) => index !== action.payload
+          (item, index) => index !== action.payload.index
         );
         const total = newList.reduce(
           (accumulator, item) => accumulator + +item.amount,
@@ -172,6 +190,7 @@ const expenseSlice = createSlice({
           unAuthorize: false,
           total: total,
           isLoading: false,
+          totalRecords: action.payload.totalRecords - 1,
         };
       }
       // state.isLoading = false;
@@ -197,6 +216,7 @@ const expenseSlice = createSlice({
         state.isLoading = false;
         state.unAuthorize = false;
         state.total = +state.total + +action.payload.data.amount;
+        state.totalRecords = action.payload.totalRecords + 1;
       } else if (!action.payload.error && action.payload.editFlag) {
         const index = action.payload.editIndex;
         const newItem = action.payload.data;

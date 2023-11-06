@@ -139,14 +139,10 @@ export default function Header() {
     <div className={darkFlag && "bg-black text-white"}>
       <div className={`container mt-1 `}>
         <div className="row    ">
-          <div className="col text-warning border border-danger">
-            {userEmail}
-          </div>
+          <div className="col text-warning ">{userEmail}</div>
 
-          <div className="col text-md-center">
-            <button
-              className="btn btn-warning   float-lg-end mb-1"
-              onClick={handleLogout}>
+          <div className="col text-end">
+            <button className="btn btn-warning    mb-1" onClick={handleLogout}>
               logout
             </button>
           </div>
@@ -154,7 +150,7 @@ export default function Header() {
 
         <div className="row">
           {!premium ? (
-            <div className="col-6 col-lg-3 border border-danger  ">
+            <div className="col-6 col-md-6 col-lg-3   ">
               <button
                 className=" btn btn-outline-warning   "
                 onClick={buyPremium}>
@@ -162,14 +158,14 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            <div className="col-6 col-lg-3 border border-danger  ">
+            <div className="col-6 col-md-6 col-lg-3   ">
               <span className="text-bg-success  text-center ">
                 Premium user
               </span>
             </div>
           )}
 
-          <div className="col-6 col-lg-3 border border-danger  d-flex justify-content-center text-secondary ">
+          <div className="col-6 col-md-6 col-lg-3   text-secondary text-center text-md-end ">
             <span>dark mode</span>
             <label className="switch mt-1 ">
               <input
@@ -180,14 +176,14 @@ export default function Header() {
               <span className="slider round"></span>
             </label>
           </div>
-          <div className="col-6 col-lg-3 border border-danger text-center ">
+          <div className="col-6 col-md-6 col-lg-3   text-lg-center ">
             <button
               className=" btn btn-outline-warning  mt-1   "
               onClick={handleLeaderboard}>
               {boardFlag ? "Hide" : "Leader board"}
             </button>
           </div>
-          <div className="col-6 col-lg-3 border border-danger text-center">
+          <div className="col-6 col-md-6 col-lg-3  text-end">
             <button
               className=" btn btn-outline-warning float-lg-end mt-1   "
               onClick={handleReportCard}>

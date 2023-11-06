@@ -1,4 +1,5 @@
 import axios from "axios";
+import TablePagination from "@mui/material/TablePagination";
 //import Razorpay from "razorpay";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +18,8 @@ export default function Expense() {
   const [editIndex, setEditIndex] = useState(-1);
   const [expenseId, setExpenseId] = useState(-1);
   const [editFlag, setEditFlag] = useState(false);
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [input, setInput] = useState({
     amount: "",
     category: "",
@@ -27,7 +29,7 @@ export default function Expense() {
   const userEmail = localStorage.getItem("userEmail");
   const navigate = useNavigate();
   // useSelctor*******************
-  const { expense, isLoading, unAuthorize, total } = useSelector(
+  const { expense, isLoading, unAuthorize, total, totalRecords } = useSelector(
     (state) => state.expense
   );
   const { boardFlag, darkFlag, reportFlag } = useSelector(
@@ -35,22 +37,26 @@ export default function Expense() {
   );
   const dispatch = useDispatch();
   let userToken = localStorage.getItem("userToken");
+  console.log({ page });
   useEffect(() => {
     console.log("expense got re mounted");
     userToken = localStorage.getItem("userToken");
     console.log("useEffect of expense ");
     const getExpense = () => {
-      dispatch(fetchExpenses(userToken));
-      console.log({ expense });
+      console.log(
+        "get expense called*******************************************************"
+      );
+      dispatch(fetchExpenses({ userToken, page, rowsPerPage }));
+      //console.log({ expense });
     };
-    getExpense();
+    // getExpense();
     if (!unAuthorize) {
       // valid user
       getExpense();
 
       return;
     }
-  }, []);
+  }, [page, rowsPerPage]);
 
   console.log({ expense });
   //handle changes in input fields
@@ -69,6 +75,7 @@ export default function Expense() {
         editIndex,
         input,
         userToken,
+        totalRecords,
       })
     );
     setInput({
@@ -107,7 +114,7 @@ export default function Expense() {
       return;
     }
 
-    dispatch(deleteExpense({ index, id, userToken })); // only one argument is accepted
+    dispatch(deleteExpense({ index, id, userToken, totalRecords })); // only one argument is accepted
   };
   function handleLogout() {
     localStorage.removeItem("userId");
@@ -115,6 +122,16 @@ export default function Expense() {
     localStorage.removeItem("userToken");
     navigate("/");
   }
+  const handleChangePage = (event, newPage) => {
+    console.log("handle change page");
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    console.log("first");
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <>
@@ -248,7 +265,9 @@ export default function Expense() {
                 return (
                   <tr key={item.id}>
                     <td>
-                      <div className="text-center pt-3 pb-2  ">{ind + 1})</div>
+                      <div className="text-center pt-3 pb-2  ">
+                        {ind + 1 + page * rowsPerPage})
+                      </div>
                     </td>
                     <td>
                       <div className="text-center pt-3 pb-2">
@@ -298,6 +317,17 @@ export default function Expense() {
             <div className="col   d-flex justify-content-end text-white ">
               $ {total}
             </div>
+          </div>
+
+          <div className="row border border-danger bg-secondary">
+            <TablePagination
+              component="div"
+              count={totalRecords}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       )}
