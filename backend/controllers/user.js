@@ -1,74 +1,74 @@
-const axios = require ('axios');
+const axios = require("axios");
 //var SibApiV3Sdk = require('sib-api-v3-sdk');
-const bcrypt = require ('bcrypt');
-const User = require ('../models/user');
-const jwt = require ('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 
 const secretKey = process.env.JWT_TOKEN;
-//const sendinBlueApiKey = process.env.API_KEY;
-const generateToken = data => {
+
+const generateToken = (data) => {
   try {
-    console.log ({generateToken: data});
+    console.log({ generateToken: data });
     const id = data.id;
     const email = data.email;
-    const token = jwt.sign ({id, email, premium: false}, secretKey, {
-      expiresIn: '112h',
+    const token = jwt.sign({ id, email, premium: false }, secretKey, {
+      expiresIn: "112h",
     });
     return token;
   } catch (error) {
-    console.log (error.message);
+    console.log(error.message);
   }
 };
 const signup = async (req, res) => {
   try {
-    console.log ('signup user');
-    console.log (req.body);
-    const {name, email, password} = req.body;
+    console.log("signup user");
+    console.log(req.body);
+    const { name, email, password } = req.body;
 
-    exists = await User.findOne ({where: {email}});
+    exists = await User.findOne({ where: { email } });
 
     if (exists) {
-      return res.status (409).json ({error: 'User already exists'});
+      return res.status(409).json({ error: "User already exists" });
     }
 
     // Hash the password
-    bcrypt.hash (password, saltRounds, async (err, hashedPassword) => {
+    bcrypt.hash(password, saltRounds, async (err, hashedPassword) => {
       if (err) {
-        console.error (err);
-        return res.status (500).json ({error: 'Password hashing failed'});
+        console.error(err);
+        return res.status(500).json({ error: "Password hashing failed" });
       }
 
       try {
         // Create the user with the hashed password
-        const data = await User.create ({
+        const data = await User.create({
           name,
           email,
           password: hashedPassword,
           premium: false,
           totalExpenseAmount: 0,
         });
-        console.log ('im data');
-        console.log (data.dataValues);
-        const token = generateToken (data.dataValues);
-        res.json ({
-          message: 'Success',
+        console.log("im data");
+        console.log(data.dataValues);
+        const token = generateToken(data.dataValues);
+        res.json({
+          message: "Success",
           token,
           id: data.dataValues.id,
           premium: data.dataValues.premium,
         });
       } catch (error) {
-        console.error (error);
+        console.error(error);
         res
-          .status (500)
-          .json ({success: false, error: 'Internal Server Error'});
+          .status(500)
+          .json({ success: false, error: "Internal Server Error" });
       }
     });
   } catch (error) {
-    console.error (error);
-    res.status (500).json ({success: false, error: 'Internal Server Error'});
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
-module.exports = {signup};
+module.exports = { signup };
