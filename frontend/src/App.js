@@ -1,28 +1,64 @@
-import React from 'react';
-import {Route, Routes} from 'react-router-dom';
-import Signup from './components/user/Signup';
-import Login from './components/user/Login';
-import Expense from './components/expense/Expense';
-import Redirect from './components/user/higherOrderComponents/Redirect';
-import {useSelector} from 'react-redux';
-import ForgotPassword from './components/user/ForgotPassword';
-import ResetPassword from './components/user/ResetPassword';
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export default function App () {
-  const {darkFlag} = useSelector (state => state.user);
-  console.log ({darkFlag: darkFlag});
+// Lazy-loaded components
+const RedirectComponent = lazy(() => import('./components/user/higherOrderComponents/Redirect'));
+const Signup = lazy(() => import('./components/user/Signup'));
+const Login = lazy(() => import('./components/user/Login'));
+const Expense = lazy(() => import('./components/expense/Expense'));
+const ForgotPassword = lazy(() => import('./components/user/ForgotPassword'));
+const ResetPassword = lazy(() => import('./components/user/ResetPassword'));
+
+const App = () => {
+  const { darkFlag } = useSelector((state) => state.user);
+
   return (
-    <div className={darkFlag && 'bg-black text-primary min-vh-100 min-vw-100 '}>
+    <div className={darkFlag ? 'bg-black text-primary min-vh-100 min-vw-100' : ''}>
       <Routes>
-        <Route path="/" element={<Redirect Component={Login} />} />
-        <Route path="/expense" element={<Redirect Component={Expense} />} />
-        <Route path="/register" element={<Redirect Component={Signup} />} />
-        <Route path="/password/forgot" element={<ForgotPassword />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<div>Loading Redirect...</div>}>
+              <RedirectComponent Component={Login} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/expense"
+          element={
+            <Suspense fallback={<div>Loading Expense...</div>}>
+              <RedirectComponent Component={Expense} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Suspense fallback={<div>Loading Signup...</div>}>
+              <RedirectComponent Component={Signup} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/password/forgot"
+          element={
+            <Suspense fallback={<div>Loading ForgotPassword...</div>}>
+              <ForgotPassword />
+            </Suspense>
+          }
+        />
         <Route
           path="password/reset-password/:reqId"
-          element={<ResetPassword />}
+          element={
+            <Suspense fallback={<div>Loading ResetPassword...</div>}>
+              <ResetPassword />
+            </Suspense>
+          }
         />
       </Routes>
     </div>
   );
-}
+};
+
+export default App;

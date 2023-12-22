@@ -1,7 +1,7 @@
 import axios from "axios";
 import TablePagination from "@mui/material/TablePagination";
 //import Razorpay from "razorpay";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,9 +10,9 @@ import {
   deleteExpense,
   fetchExpenses,
 } from "../../store/slices/expense";
-import Leaderboard from "./Leaderboard";
 import Header from "./Header";
-import ReportCard from "./ReportCard";
+const Leaderboard =lazy(()=>import("./Leaderboard")) ;
+const ReportCard =lazy(()=>import('./ReportCard')) 
 
 export default function Expense() {
   const [editIndex, setEditIndex] = useState(-1);
@@ -136,8 +136,8 @@ export default function Expense() {
   return (
     <>
       <Header />
-      {boardFlag && <Leaderboard />}
-      {reportFlag && <ReportCard />}
+      {boardFlag && <Suspense fallback={<div>loading leaderboard..</div>}><Leaderboard /></Suspense> }
+      {reportFlag && <Suspense fallback={<div>loading leaderboard..</div>}><ReportCard /></Suspense>}
 
       {showInput && (
         <div

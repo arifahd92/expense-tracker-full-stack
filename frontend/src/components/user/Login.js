@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 function Login() {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "dummy@gmail.com",
+    password: "123456",
   });
 
   const [showPassword, setShowPassword] = useState(false);
