@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 //const axios = require("axios");
 const saltRounds = 10;
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 //update password***************
 const updatePassword = async (req, res) => {
   try {
