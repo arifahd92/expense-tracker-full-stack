@@ -24,7 +24,8 @@ export const fetchExpenses = createAsyncThunk(
           },
         }
       );
-      console.log("get data response inside fetch async");
+      console.log("get data response inside fetch async******************* response.data");
+      console.log(response.data)
       const { data, total, premium, totalRecords } = response.data;
       console.log(data);
       // const premium = response.data.premium;
@@ -212,7 +213,9 @@ const expenseSlice = createSlice({
     [addUpdate.fulfilled]: (state, action) => {
       if (!action.payload.error && !action.payload.editFlag) {
         //add data
+
         state.expense.push(action.payload.data);
+        console.log({addData:action.payload.data})
         state.isLoading = false;
         state.unAuthorize = false;
         state.total = +state.total + +action.payload.data.amount;

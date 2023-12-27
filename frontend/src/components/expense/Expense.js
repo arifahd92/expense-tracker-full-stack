@@ -263,7 +263,7 @@ export default function Expense() {
             {expense.length > 0 &&
               expense.map((item, ind) => {
                 return (
-                  <tr key={item.id}>
+                  <tr key={item._id}>
                     <td>
                       <div className="text-center pt-3 pb-2  ">
                         {ind + 1 + page * rowsPerPage})
@@ -289,7 +289,7 @@ export default function Expense() {
                         <button
                           disabled={isLoading}
                           className="btn  bg-warning "
-                          onClick={() => handleEdit(ind, item.id)}>
+                          onClick={() => handleEdit(ind, item._id)}>
                           edit
                         </button>
                       </div>
@@ -298,7 +298,7 @@ export default function Expense() {
                       <div className="text-center pt-2 pb-1 ">
                         <button
                           disabled={isLoading || editFlag}
-                          onClick={() => handleDelete(ind, item.id)}
+                          onClick={() => handleDelete(ind, item._id)}
                           className="btn bg-danger ">
                           delete
                         </button>

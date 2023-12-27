@@ -46,6 +46,7 @@ export default function Header() {
     });
   }
   async function buyPremium() {
+    console.log('buy premium called')
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -72,7 +73,7 @@ export default function Header() {
     const { amount, id: order_id, currency } = result.data;
 
     const options = {
-      key: "rzp_test_Xkhis8ORygYj16", // Enter the Key ID generated from the Dashboard
+      key: "rzp_test_2Qj7oVzv1mU8TM", // Enter the Key ID generated from the Dashboard
       amount: amount.toString(),
       currency: currency,
       name: "Arif corp",

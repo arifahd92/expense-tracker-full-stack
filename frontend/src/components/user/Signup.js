@@ -41,8 +41,9 @@ function Signup() {
       }
       console.log(response.data);
       const data = response.data;
+      console.log(typeof(data.id))
       localStorage.setItem("userToken", data.token);
-      localStorage.setItem("userId", data.id);
+      localStorage.setItem("userId",JSON.stringify( data.id));
       localStorage.setItem("userEmail", formData.email);
       localStorage.setItem("premium", JSON.stringify(response.data.premium));
       alert("success");

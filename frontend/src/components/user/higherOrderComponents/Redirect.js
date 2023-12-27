@@ -6,10 +6,11 @@ export default function Redirect({ Component }) {
   const userToken = localStorage.getItem("userToken");
   const StringId = localStorage.getItem("userId");
   const email = localStorage.getItem("userEmail");
+  console.log({userToken,StringId,email})
   let id;
 
   if (StringId) {
-    id = JSON.parse(StringId);
+    id = JSON.parse(StringId) || null;
   }
 
   useEffect(() => {

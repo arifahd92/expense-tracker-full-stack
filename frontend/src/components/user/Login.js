@@ -41,9 +41,9 @@ function Login() {
       console.log(response);
       const { token } = response.data;
       const premium = response.data.premium;
-      const userId = response.data.userId.toString();
+      const userId = response.data.userId;
       localStorage.setItem("userToken", token);
-      localStorage.setItem("userId", userId);
+      localStorage.setItem("userId", JSON.stringify(userId));
       localStorage.setItem("userEmail", formData.email);
       localStorage.setItem("premium", JSON.stringify(premium));
       alert("success");
