@@ -117,9 +117,10 @@ export default function ReportCard() {
             <tbody>
               {report.length >= 4 &&
                 report.map((item, ind) => {
+                  console.log({item})
                   return (
                     <tr key={item.id} className="text-center ">
-                      {ind != 0 && item.id && (
+                      {ind != 0 && item._id  && (
                         <>
                           <td>#</td>
                           <td>{item.category}</td>
@@ -127,7 +128,7 @@ export default function ReportCard() {
                           <td>{item.amount}$</td>
                         </>
                       )}
-                      {ind != 0 && !item.id && (
+                      {ind != 0 && !item._id && (
                         <>
                           <td></td>
                           <td className=" text-info">
