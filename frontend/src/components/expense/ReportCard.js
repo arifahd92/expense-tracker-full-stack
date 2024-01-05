@@ -119,7 +119,7 @@ export default function ReportCard() {
                 report.map((item, ind) => {
                   console.log({item})
                   return (
-                    <tr key={item.id} className="text-center ">
+                    <tr key={item._id} className="text-center ">
                       {ind != 0 && item._id  && (
                         <>
                           <td>#</td>
